@@ -23,33 +23,68 @@ const rightKey = 39;
 // #endregion
 
 // Script scope variables
-let gridTiles = {};
+let gridSize = 11;
+let gridTiles = [];
+
+let player;
 let keysDown = {};      //Is the key at this index (code) currently down?
 let downLastFrame = {}; //Was the key at this index (code) down last frame?
 
-// debug
-// gridTiles["1,2"] = new Tile();
-// debug
-
-// Assign player sprite image, set anchor to center of sprite
-let player = new PIXI.Sprite.from("Media/Brio-Sprite.png")
-player.anchor.set(0.5);
-
-// Adjust player then place them on screen
-player.width = tileSize;
-player.height = tileSize;
-player.x = sceneWidth / 2;
-player.y = sceneHeight / 2;
-app.stage.addChild(player);
-
-// When user presses / releases a key, fire these functions
-window.addEventListener("keydown", onKeysDown);
-window.addEventListener("keyup", onKeysUp);
-
-// Attach update function to built in ticker; fires every frame
-app.ticker.add(update);
+// preload images, then fire setup function
+PIXI.loader.
+    add(["Media/Brio-Sprite.png", "Media/Tile-Sprite.png"]).
+    on("progress", e => { console.log(`|| ${e.progress}% loaded ||`) }).
+    load(setup)
+;
 
 // --- Functions --- \\
+
+// Set up everything needed to run the game at start
+function setup() {
+    // Set the amount of offset from the edges of the scene the grid has
+    // Currently set to be centered on the scene
+    let gridXOffset = (sceneWidth / 2) - ((gridSize * tileSize) / 2) + tileSize / 2;
+    let gridYOffset = (sceneHeight / 2) - ((gridSize * tileSize) / 2) + tileSize / 2;
+    // let gridYOffset = 0;
+
+    // For each column of the grid, make an array inside the macro array
+    for (let x = 0; x < gridSize; x++) {
+        gridTiles[x] = [];
+
+        // For every row of above column, add a new tile to that spot
+        for (let y = 0; y < gridSize; y++) {
+            // The grid offset is the starting position of the grid. The position is then shifted over by
+            // however many tiles we're currently at in this for loop.
+            gridTiles[x][y] = new Tile (
+                tileSize,
+                gridXOffset + tileSize * x,
+                gridYOffset + tileSize * y,
+                true
+            );
+
+            // Once we've positioned the new tile, add it to the stage.
+            app.stage.addChild(gridTiles[x][y]);
+        }
+    }
+
+    // Assign player sprite image, set anchor to center of sprite
+    player = new PIXI.Sprite.from("Media/Brio-Sprite.png");
+    player.anchor.set(0.5);
+
+    // Adjust player then place them on screen
+    player.width = tileSize;
+    player.height = tileSize;
+    player.x = sceneWidth / 2;
+    player.y = sceneHeight / 2;
+    app.stage.addChild(player);
+
+    // When user presses / releases a key, fire these functions
+    window.addEventListener("keydown", onKeysDown);
+    window.addEventListener("keyup", onKeysUp);
+
+    // Attach update function to built in ticker; fires every frame
+    app.ticker.add(update);
+}
 
 // Update fires every frame; it's where basic game logic and whatnot updates!
 function update() {
