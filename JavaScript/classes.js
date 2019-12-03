@@ -1,7 +1,7 @@
 class Tile extends PIXI.Sprite {
     constructor(size, x = 0, y = 0, canTraverse = true, tint = 0x888888) {
         super(PIXI.loader.resources["Media/Tile-Sprite.png"].texture);
-        
+
         this.anchor.set(0.5, 0.5);
         this.width = size;
         this.height = size;
@@ -11,6 +11,10 @@ class Tile extends PIXI.Sprite {
         this.tint = tint;               //since Tiles are white, tint = the color of the tile
 
         // If the tile isn't traversable, it shouldn't be visible either
+        // Think of it like a "gap" in the grid
         this.visible = canTraverse;
     }
+
+    // Check if the given position is the same as this tile's position.
+    comparePositions(xToCompare, yToCompare) { return xToCompare === this.x && yToCompare === this.y };
 }
