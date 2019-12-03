@@ -11,15 +11,15 @@ const sceneHeight = app.view.height;
 const tileSize = 50;
 
 // #region Key Codes
-const Wkey = 87;
-const Akey = 65;
-const Skey = 83;
-const Dkey = 68;
+const wKey = 87;
+const aKey = 65;
+const sKey = 83;
+const dKey = 68;
 
-const Upkey = 38;
-const Leftkey = 37;
-const Downkey = 40;
-const Rightkey = 39;
+const upKey = 38;
+const leftKey = 37;
+const downKey = 40;
+const rightKey = 39;
 // #endregion
 
 // Script scope variables
@@ -55,9 +55,7 @@ function update() {
 function onKeysDown(e) {
     keysDown[e.keyCode] = true;
 
-    if (keyPressed(Wkey) || keyPressed(Upkey)) {
-        MovePlayer(false, false);
-    }
+    GetMovementInput();
 
     downLastFrame[e.keyCode] = true;
 }
@@ -68,11 +66,30 @@ function onKeysUp(e) {
     downLastFrame[e.keyCode] = false;
 }
 
+// Checks to see if WASD or an arrow key was just pressed, and if so, moves the player in that direction.
+function GetMovementInput() {
+    // Up and down movement
+    if (keyPressed(wKey) || keyPressed(upKey)) {
+        movePlayer(false, false);
+    }
+    else if (keyPressed(sKey) || keyPressed(downKey)) {
+        movePlayer(false, true);
+    }
+
+    // Left and right movement
+    else if (keyPressed(aKey) || keyPressed(leftKey)) {
+        movePlayer(true, false);
+    }
+    else if (keyPressed(dKey) || keyPressed(rightKey)) {
+        movePlayer(true, true);
+    }
+}
+
 // Helper function that returns true if the given key was just pressed.
 function keyPressed(keyCode) { return keysDown[keyCode] && !downLastFrame[keyCode] };
 
 // Moves the player on the axis implied by isHorizontal, in the direction implied by isPositive.
-function MovePlayer(isHorizontal, isPositive) {
+function movePlayer(isHorizontal, isPositive) {
     // If positive movement, alter by tileSize. Otherwise, alter by negative tileSize.
     let amount = isPositive ? tileSize : -tileSize;
 
