@@ -1,5 +1,5 @@
 class Tile extends PIXI.Sprite {
-    constructor(x = 0, y = 0, canTraverse = true) {
+    constructor(x = 0, y = 0, canTraverse = true, tint = 0xFFFFFF) {
         // set the anchor to the bottom left; helps with cartesian coordinates
         this.anchor.set(0, 1);
         this.x = x;

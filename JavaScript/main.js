@@ -28,7 +28,7 @@ let keysDown = {};      //Is the key at this index (code) currently down?
 let downLastFrame = {}; //Was the key at this index (code) down last frame?
 
 // debug
-// gridTiles["1,2"] = {isObstacle: false};
+// gridTiles["1,2"] = new Tile();
 // debug
 
 // Assign player sprite image, set anchor to center of sprite
