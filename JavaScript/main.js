@@ -23,8 +23,8 @@ const rightKey = 39;
 // #endregion
 
 // Script scope variables
-let keysDown = {};      //Is the key at this code currently down?
-let downLastFrame = {}; //Was the key at this code down last frame?
+let keysDown = {};      //Is the key at this index (code) currently down?
+let downLastFrame = {}; //Was the key at this index (code) down last frame?
 
 // Assign player sprite image, set anchor to center of sprite
 let player = new PIXI.Sprite.from("Media/Brio-Sprite.png")
