@@ -31,8 +31,8 @@ let player = new PIXI.Sprite.from("Media/Brio-Sprite.png")
 player.anchor.set(0.5);
 
 // Adjust player then place them on screen
-player.width = tileSize - 10;
-player.height = tileSize - 10;
+player.width = tileSize;
+player.height = tileSize;
 player.x = sceneWidth / 2;
 player.y = sceneHeight / 2;
 app.stage.addChild(player);
