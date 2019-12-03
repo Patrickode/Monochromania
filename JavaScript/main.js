@@ -11,15 +11,15 @@ const sceneHeight = app.view.height;
 const tileSize = 50;
 
 // #region Key Codes
-const WKey = 87;
-const AKey = 65;
-const SKey = 83;
-const DKey = 68;
+const Wkey = 87;
+const Akey = 65;
+const Skey = 83;
+const Dkey = 68;
 
-const UpKey = 38;
-const LeftKey = 37;
-const DownKey = 40;
-const RightKey = 39;
+const Upkey = 38;
+const Leftkey = 37;
+const Downkey = 40;
+const Rightkey = 39;
 // #endregion
 
 // Script scope variables
@@ -55,11 +55,32 @@ function update() {
 function onKeysDown(e) {
     keysDown[e.keyCode] = true;
 
+    if (keyPressed(Wkey) || keyPressed(Upkey)) {
+        MovePlayer(false, false);
+    }
+
     downLastFrame[e.keyCode] = true;
 }
 
 // On key press, set the corresponding index to false
 function onKeysUp(e) {
     keysDown[e.keyCode] = false;
-    downLastFrame[e.keyCode] = true;
+    downLastFrame[e.keyCode] = false;
+}
+
+// Helper function that returns true if the given key was just pressed.
+function keyPressed(keyCode) { return keysDown[keyCode] && !downLastFrame[keyCode] };
+
+// Moves the player on the axis implied by isHorizontal, in the direction implied by isPositive.
+function MovePlayer(isHorizontal, isPositive) {
+    // If positive movement, alter by tileSize. Otherwise, alter by negative tileSize.
+    let amount = isPositive ? tileSize : -tileSize;
+
+    // If moving horizontally, alter player.x. Otherwise, alter player.y.
+    if (isHorizontal) {
+        player.x += amount;
+    }
+    else {
+        player.y += amount;
+    }
 }
