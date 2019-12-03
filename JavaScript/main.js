@@ -23,8 +23,13 @@ const rightKey = 39;
 // #endregion
 
 // Script scope variables
+let gridTiles = {};
 let keysDown = {};      //Is the key at this index (code) currently down?
 let downLastFrame = {}; //Was the key at this index (code) down last frame?
+
+// debug
+// gridTiles["1,2"] = {isObstacle: false};
+// debug
 
 // Assign player sprite image, set anchor to center of sprite
 let player = new PIXI.Sprite.from("Media/Brio-Sprite.png")
