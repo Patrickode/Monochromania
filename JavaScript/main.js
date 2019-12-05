@@ -74,7 +74,7 @@ function setup() {
         tileSize,
         exitXPos,
         exitYPos,
-        0x00FF00
+        0xFFFFFF
     )
     gridTiles[gridSize - 1][gridSize - 1] = tileToMakeExit;
 
