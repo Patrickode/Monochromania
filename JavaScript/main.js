@@ -67,6 +67,17 @@ function setup() {
         }
     }
 
+    let tileToMakeExit = gridTiles[gridSize - 1][gridSize - 1];
+    let exitXPos = tileToMakeExit.x;
+    let exitYPos = tileToMakeExit.y;
+    tileToMakeExit = new Exit(
+        tileSize,
+        exitXPos,
+        exitYPos,
+        0x00FF00
+    )
+    gridTiles[gridSize - 1][gridSize - 1] = tileToMakeExit;
+
     // Assign player sprite image, set anchor to center of sprite
     player = new PIXI.Sprite.from("Media/Brio-Sprite.png");
     player.anchor.set(0.5);

@@ -40,7 +40,7 @@ class Exit extends Tile {
     constructor(size, x = 0, y = 0, tint = 0xAAAAAA) {
         super(size, x, y, true, tint)
 
-        // Uncomment this when done finalizing tile / exit sprites
+        // Uncomment this when done finalizing tile / exit sprites; changes texture
         // this.texture = PIXI.Texture.from("Media/Exit-Sprite.png");
     }
 }
