@@ -78,6 +78,9 @@ function setup() {
     player.y = sceneHeight / 2;
     app.stage.addChild(player);
 
+    // The player's now on their starting tile, so update that tile to be their color.
+    getTileAtCoords(player.x, player.y).updateColorTint();
+
     // When user presses / releases a key, fire these functions
     window.addEventListener("keydown", onKeysDown);
     window.addEventListener("keyup", onKeysUp);
