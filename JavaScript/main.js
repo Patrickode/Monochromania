@@ -135,10 +135,23 @@ function movePlayer(isHorizontal, isPositive) {
 
     // If moving horizontally, alter player.x. Otherwise, alter player.y.
     if (isHorizontal) {
-        player.x += amount;
+        
+        // Gets the tile at the new position and only moves the player / updates tint if said tile exists.
+        let tileMovedOnto = getTileAtCoords(player.x + amount, player.y);
+        if (tileMovedOnto) {
+            player.x += amount;
+    
+            tileMovedOnto.updateColorTint();
+        }
     }
     else {
-        player.y += amount;
+        // Gets the tile at the new position and only moves the player / updates tint if said tile exists.
+        let tileMovedOnto = getTileAtCoords(player.x, player.y + amount);
+        if (tileMovedOnto) {
+            player.y += amount;
+    
+            tileMovedOnto.updateColorTint();
+        }
     }
 }
 
@@ -155,10 +168,18 @@ function isInBounds(xPosToCheck, yPosToCheck) {
     else if (xPosToCheck < minTile.x || yPosToCheck < minTile.y) {
         return false;
     }
+
+    // If we've gotten this far, the tile's in the bounds of the grid.
+    return true;
 }
 
 // Gets a a tile on the grid from a pair of coordinates. Returns null if no tile at exists at given coords.
 function getTileAtCoords(xCoord, yCoord) {
+    // Before we do any looping, check to see if the coords are out of bounds. Bail out early if so.
+    if (!isInBounds(xCoord, yCoord)) {
+        return null;
+    }
+
     // For every column of the grid,
     for (let x = 0; x < gridTiles.length; x++) {
 

@@ -23,4 +23,24 @@ class Tile extends PIXI.Sprite {
 
         return xToCompare === this.x && yToCompare === this.y
     };
+
+    updateColorTint() {
+        //If the tint is green, we turn it back to white/gray.
+        if (this.tint == 0x008000) {
+            this.tint = 0x888888;
+        }
+        //Else if it's not, we turn it to green.
+        else {
+            this.tint = 0x008000;
+        }
+    }
+}
+
+class Exit extends Tile {
+    constructor(size, x = 0, y = 0, tint = 0xAAAAAA) {
+        super(size, x, y, true, tint)
+
+        // Uncomment this when done finalizing tile / exit sprites
+        // this.texture = PIXI.Texture.from("Media/Exit-Sprite.png");
+    }
 }
