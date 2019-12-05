@@ -87,7 +87,6 @@ function setup() {
     player.height = tileSize;
     player.x = sceneWidth / 2;
     player.y = sceneHeight / 2;
-    player.tint = 0x00FF00;
     app.stage.addChild(player);
 
     // The player's now on their starting tile, so update that tile to be their color.
