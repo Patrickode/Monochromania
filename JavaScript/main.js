@@ -154,4 +154,42 @@ function checkTileOn(){
         }
     }
   }
+  function isInBounds(xPosToCheck, yPosToCheck) {
+    let minTile = gridTiles[0][0];
+    let maxTile = gridTiles[gridSize - 1][gridSize - 1];
+
+    // If the given xpos / ypos is greater than the maximum grid x / y, the position is out of bounds
+    if (xPosToCheck > maxTile.x || yPosToCheck > maxTile.y) {
+        return false;
+    }
+
+    // If the given xpos / ypos is less than the minimum grid x / y, the position is out of bounds
+    else if (xPosToCheck < minTile.x || yPosToCheck < minTile.y) {
+        return false;
+    }
+}
+
+// Gets a a tile on the grid from a pair of coordinates. Returns null if no tile at exists at given coords.
+function getTileAtCoords(xCoord, yCoord) {
+    // For every column of the grid,
+    for (let x = 0; x < gridTiles.length; x++) {
+
+        // Check if the xcoord matches.
+        if (gridTiles[x][0].comparePositions(xCoord, null)) {
+
+            // Once we've found an x that matches, go into the sub array and look for a y that matches.
+            for (let y = 0; y < gridTiles[x].length; y++) {
+
+                // Check if the y matches the position we're at, and if it does, return the tile here.
+                if (gridTiles[x][y].comparePositions(xCoord, yCoord)) {
+                    return gridTiles[x][y];
+                } // If we've gotten here, there is no tile that matches the given y. Return null.
+                return null;
+            }
+        }
+        // If we've gotten here, there is no tile that matches the given x. Return null.
+    return false;
+    } 
+}
+
 
