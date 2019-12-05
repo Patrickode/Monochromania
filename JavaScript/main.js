@@ -35,7 +35,7 @@ PIXI.loader.
     add(["Media/Brio-Sprite.png", "Media/Tile-Sprite.png", "Media/Exit-Sprite.png"]).
     on("progress", e => { console.log(`|| ${e.progress}% loaded ||`) }).
     load(setup)
-    ;
+;
 
 // --- Functions --- \\
 
