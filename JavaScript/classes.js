@@ -1,5 +1,5 @@
 class Tile extends PIXI.Sprite {
-    constructor(size, x = 0, y = 0, canTraverse = true, tint = 0x888888) {
+    constructor(size, x = 0, y = 0, canTraverse = true, tint = 0xFFFFFF) {
         super(PIXI.loader.resources["Media/Tile-Sprite.png"].texture);
 
         this.anchor.set(0.5, 0.5);
@@ -37,10 +37,9 @@ class Tile extends PIXI.Sprite {
 }
 
 class Exit extends Tile {
-    constructor(size, x = 0, y = 0, tint = 0xAAAAAA) {
+    constructor(size, x = 0, y = 0, tint = 0xFFFFFF) {
         super(size, x, y, true, tint)
 
-        // Uncomment this when done finalizing tile / exit sprites; changes texture
-        // this.texture = PIXI.Texture.from("Media/Exit-Sprite.png");
+        this.texture = PIXI.Texture.from("Media/Exit-Sprite.png");
     }
 }
