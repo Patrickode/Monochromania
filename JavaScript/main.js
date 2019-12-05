@@ -35,7 +35,7 @@ PIXI.loader.
     add(["Media/Brio-Sprite.png", "Media/Tile-Sprite.png"]).
     on("progress", e => { console.log(`|| ${e.progress}% loaded ||`) }).
     load(setup)
-    ;
+;
 
 // --- Functions --- \\
 
@@ -55,7 +55,7 @@ function setup() {
         for (let y = 0; y < gridSize; y++) {
             // The grid offset is the starting position of the grid. The position is then shifted over by
             // however many tiles we're currently at in this for loop.
-            gridTiles[x][y] = new Tile(
+            gridTiles[x][y] = new Tile (
                 tileSize,
                 gridXOffset + tileSize * x,
                 gridYOffset + tileSize * y,
@@ -136,49 +136,22 @@ function movePlayer(isHorizontal, isPositive) {
     // If moving horizontally, alter player.x. Otherwise, alter player.y.
     if (isHorizontal) {
         player.x += amount;
+        checkTileOn();
     }
     else {
         player.y += amount;
+        checkTileOn();
     }
 }
-
-function isInBounds(xPosToCheck, yPosToCheck) {
-    let minTile = gridTiles[0][0];
-    let maxTile = gridTiles[gridSize - 1][gridSize - 1];
-
-    // If the given xpos / ypos is greater than the maximum grid x / y, the position is out of bounds
-    if (xPosToCheck > maxTile.x || yPosToCheck > maxTile.y) {
-        return false;
-    }
-
-    // If the given xpos / ypos is less than the minimum grid x / y, the position is out of bounds
-    else if (xPosToCheck < minTile.x || yPosToCheck < minTile.y) {
-        return false;
-    }
-}
-
-// Gets a a tile on the grid from a pair of coordinates. Returns null if no tile at exists at given coords.
-function getTileAtCoords(xCoord, yCoord) {
-    // For every column of the grid,
-    for (let x = 0; x < gridTiles.length; x++) {
-
-        // Check if the xcoord matches.
-        if (gridTiles[x][0].comparePositions(xCoord, null)) {
-
-            // Once we've found an x that matches, go into the sub array and look for a y that matches.
-            for (let y = 0; y < gridTiles[x].length; y++) {
-
-                // Check if the y matches the position we're at, and if it does, return the tile here.
-                if (gridTiles[x][y].comparePositions(xCoord, yCoord)) {
-                    return gridTiles[x][y];
-                }
+//Helper function that basically just checks what tile we're on after the player has moved.
+function checkTileOn(){
+    //Loops through the entire list to find what tile we're on. There's almost certainly a WAY more efficient method of doing this but I'm tired so here it is.
+    for(let x = 0; x < gridSize; x++){
+        for(let y = 0; y < gridSize; y++){
+            if(gridTiles[x][y].comparePositions(player.x, player.y) == true){
+                gridTiles[x][y].updateColorTint();
             }
-
-            // If we've gotten here, there is no tile that matches the given y. Return null.
-            return null;
         }
     }
+  }
 
-    // If we've gotten here, there is no tile that matches the given x. Return null.
-    return false;
-}

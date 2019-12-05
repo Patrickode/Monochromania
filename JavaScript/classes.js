@@ -15,12 +15,20 @@ class Tile extends PIXI.Sprite {
         this.visible = canTraverse;
     }
 
-    // Check if the given position is the same as this tile's position.
-    // Passing in a false / falsy value to either parameter lets you check the other on its own.
-    comparePositions(xToCompare, yToCompare) {
-        xToCompare = xToCompare ? xToCompare : this.x;
-        yToCompare = yToCompare ? yToCompare : this.y;
+    updateColorTint(){
+        //If the tint is green, we turn it back to white/gray.
+        if(this.tint == 0x008000)
+        {
+            this.tint = 0x888888;
+        }
+        //Else if it's not, we turn it to green.
+        else{
+            this.tint = 0x008000;
+        }
+        
+        
+    }
 
-        return xToCompare === this.x && yToCompare === this.y
-    };
+    // Check if the given position is the same as this tile's position.
+    comparePositions(xToCompare, yToCompare) { return xToCompare === this.x && yToCompare === this.y };
 }
