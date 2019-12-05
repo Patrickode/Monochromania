@@ -16,5 +16,11 @@ class Tile extends PIXI.Sprite {
     }
 
     // Check if the given position is the same as this tile's position.
-    comparePositions(xToCompare, yToCompare) { return xToCompare === this.x && yToCompare === this.y };
+    // Passing in a false / falsy value to either parameter lets you check the other on its own.
+    comparePositions(xToCompare, yToCompare) {
+        xToCompare = xToCompare ? xToCompare : this.x;
+        yToCompare = yToCompare ? yToCompare : this.y;
+
+        return xToCompare === this.x && yToCompare === this.y
+    };
 }
