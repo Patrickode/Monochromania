@@ -44,22 +44,7 @@ PIXI.loader.
 // Set up everything needed to run the game at start
 function setup() {
     // Load the starting level up
-    LoadLevel(gridSize - 1, gridSize - 1, undefined);
-
-    // Assign player sprite image, set anchor to center of sprite
-    player = new PIXI.Sprite.from("Media/Brio-Sprite.png");
-    player.anchor.set(0.5);
-
-    // Adjust player then place them on screen
-    player.width = tileSize;
-    player.height = tileSize;
-    player.x = sceneWidth / 2;
-    player.y = sceneHeight / 2;
-    player.tint = 0x00FF00;
-    app.stage.addChild(player);
-
-    // The player's now on their starting tile, so update that tile to be their color.
-    getTileAtCoords(player.x, player.y).updateColorTint();
+    LoadLevel(new Index(5, 5), new Index(gridSize - 1, gridSize - 1), undefined);
 
     // When user presses / releases a key, fire these functions
     window.addEventListener("keydown", onKeysDown);
@@ -69,7 +54,7 @@ function setup() {
     app.ticker.add(update);
 }
 
-function LoadLevel(exitIndexX, exitIndexY, gapIndexArray) {
+function LoadLevel(playerIndex, exitIndex, gapIndexArray) {
     // First of all, reset the scene, so we have a fresh start to load onto.
     ResetScene();
 
@@ -104,7 +89,7 @@ function LoadLevel(exitIndexX, exitIndexY, gapIndexArray) {
     // !TODO!
 
     // Now make the exit tile, and put it at the specified index
-    exitTile = gridTiles[exitIndexX][exitIndexY];
+    exitTile = gridTiles[exitIndex.x][exitIndex.y];
     let exitXPos = exitTile.x;
     let exitYPos = exitTile.y;
     exitTile = new Exit(
@@ -113,8 +98,23 @@ function LoadLevel(exitIndexX, exitIndexY, gapIndexArray) {
         exitYPos,
         0xFFFFFF
     )
-    gridTiles[exitIndexX][exitIndexY] = exitTile;
+    gridTiles[exitIndex.x][exitIndex.y] = exitTile;
     app.stage.addChild(exitTile);
+
+    // Finally, we add the player to the scene
+    // Assign player sprite image, set anchor to center of sprite
+    player = new PIXI.Sprite.from("Media/Brio-Sprite.png");
+    player.anchor.set(0.5);
+
+    // Adjust player then place them on screen
+    player.width = tileSize;
+    player.height = tileSize;
+    player.position = gridTiles[playerIndex.x][playerIndex.y].position;
+    player.tint = 0x00FF00;
+    app.stage.addChild(player);
+
+    // The player's now on their starting tile, so update that tile to be their color.
+    gridTiles[playerIndex.x][playerIndex.y].updateColorTint();
 }
 
 // Removes all children from the stage, giving us a clean slate.
