@@ -54,6 +54,7 @@ function setup() {
     app.ticker.add(update);
 }
 
+// Loads a level with all the given parameters.
 function LoadLevel(playerIndex, exitIndex, gapIndexArray) {
     // First of all, reset the scene, so we have a fresh start to load onto.
     ResetScene();
