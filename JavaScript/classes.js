@@ -43,3 +43,21 @@ class Exit extends Tile {
         this.texture = PIXI.loader.resources["Media/Exit-Sprite.png"].texture;
     }
 }
+
+class Index {
+    constructor(x, y){
+        if (isNaN(x)) {
+            this.x = 0;
+        }
+        else {
+            this.x = Math.trunc(x);
+        }
+
+        if (isNaN(y)) {
+            this.y = 0;
+        }
+        else {
+            this.y = Math.trunc(y);
+        }
+    }
+}
