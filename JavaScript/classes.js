@@ -17,11 +17,11 @@ class Tile extends PIXI.Sprite {
         //If there's a gap then we just automatically assume it's traversed for the sake of level checking later.
         if(this.visible == false)
         {
-            this.isTraversed = true;
+            this.isColored = true;
         }
         //Else we say that it isn't traversed yet.
         else{
-            this.isTraversed = false;
+            this.isColored = false;
         }
     }
 
@@ -38,12 +38,12 @@ class Tile extends PIXI.Sprite {
         //If the tint is green, we turn it back to white/gray.
         if (this.tint == 0x00FF00) {
             this.tint = 0xFFFFFF;
-            this.isTraversed = false;
+            this.isColored = false;
         }
         //Else if it's not, we turn it to green.
         else {
             this.tint = 0x00FF00;
-            this.isTraversed = true;
+            this.isColored = true;
         }
     }
 }

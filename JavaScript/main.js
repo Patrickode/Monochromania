@@ -6,7 +6,6 @@ const app = new PIXI.Application(600, 600);
 document.body.appendChild(app.view);
 
 // constants
-
 const sceneWidth = app.view.width;
 const sceneHeight = app.view.height;
 const tileSize = 50;
@@ -26,19 +25,19 @@ const rightKey = 39;
 // Script scope variables
 let gridSize = 11;
 let gridTiles = [];
-let tileToMakeExit;
+let exitTile;
 
 let player;
 let keysDown = {};      //Is the key at this index (code) currently down?
 let downLastFrame = {}; //Was the key at this index (code) down last frame?
-let levelNum = 1; //Keeps track of what level we are on.
+let levelNum = 1;       //Keeps track of what level we are on.
 
 // preload images, then fire setup function
 PIXI.loader.
     add(["Media/Brio-Sprite.png", "Media/Tile-Sprite.png", "Media/Exit-Sprite.png"]).
     on("progress", e => { console.log(`|| ${e.progress}% loaded ||`) }).
     load(setup)
-;
+    ;
 
 // --- Functions --- \\
 
@@ -48,7 +47,6 @@ function setup() {
     // Currently set to be centered on the scene
     let gridXOffset = (sceneWidth / 2) - ((gridSize * tileSize) / 2) + tileSize / 2;
     let gridYOffset = (sceneHeight / 2) - ((gridSize * tileSize) / 2) + tileSize / 2;
-    // let gridYOffset = 0;
 
     // For each column of the grid, make an array inside the macro array
     for (let x = 0; x < gridSize; x++) {
@@ -70,17 +68,17 @@ function setup() {
         }
     }
 
-    tileToMakeExit = gridTiles[gridSize - 1][gridSize - 1];
-    let exitXPos = tileToMakeExit.x;
-    let exitYPos = tileToMakeExit.y;
-    tileToMakeExit = new Exit(
+    exitTile = gridTiles[gridSize - 1][gridSize - 1];
+    let exitXPos = exitTile.x;
+    let exitYPos = exitTile.y;
+    exitTile = new Exit(
         tileSize,
         exitXPos,
         exitYPos,
         0xFFFFFF
     )
-    gridTiles[gridSize - 1][gridSize - 1] = tileToMakeExit;
-    app.stage.addChild(tileToMakeExit);
+    gridTiles[gridSize - 1][gridSize - 1] = exitTile;
+    app.stage.addChild(exitTile);
 
     // Assign player sprite image, set anchor to center of sprite
     player = new PIXI.Sprite.from("Media/Brio-Sprite.png");
@@ -107,7 +105,15 @@ function setup() {
 
 // Update fires every frame; it's where basic game logic and whatnot updates!
 function update() {
-
+    // Checks if the exit tile is colored, and if so, if every tile is colored
+    if (exitTile.isColored) {
+        if (isGridColored()) {
+            console.log("Initiate level end");
+        }
+        else{
+            console.log("Not all tiles are colored, level fail");
+        }
+    }
 }
 
 // On key press, set the corresponding index to true
@@ -154,19 +160,18 @@ function movePlayer(isHorizontal, isPositive) {
 
     // If moving horizontally, alter player.x. Otherwise, alter player.y.
     if (isHorizontal) {
-        
+
         // Gets the tile at the new position and only moves the player / updates tint if said tile exists.
         let tileMovedOnto = getTileAtCoords(player.x + amount, player.y);
         if (tileMovedOnto) {
             player.x += amount;
-    
+
             tileMovedOnto.updateColorTint();
 
-            if(checkIfEnd() == true)
-            {
+            if (checkIfEnd() == true) {
                 loadNewLevel();
             }
-            
+
         }
     }
     else {
@@ -174,10 +179,9 @@ function movePlayer(isHorizontal, isPositive) {
         let tileMovedOnto = getTileAtCoords(player.x, player.y + amount);
         if (tileMovedOnto) {
             player.y += amount;
-    
+
             tileMovedOnto.updateColorTint();
-            if(checkIfEnd() == true)
-            {
+            if (checkIfEnd() == true) {
                 loadNewLevel();
             }
         }
@@ -232,72 +236,81 @@ function getTileAtCoords(xCoord, yCoord) {
     // If we've gotten here, there is no tile that matches the given x. Return null.
     return false;
 }
-function checkIfEnd()
-{
-    for(let x = 0; x < gridSize; x++)
-    {
-        for(let y = 0; y < gridSize; y++)
-        {
-            if (gridTiles[x][y].isTraversed == false)
-            {
+
+// function checkIfEnd() {
+//     for (let x = 0; x < gridSize; x++) {
+//         for (let y = 0; y < gridSize; y++) {
+//             if (gridTiles[x][y].isColored == false) {
+//                 return false;
+//             }
+//         }
+//     }
+
+//     //If we're not currently on the exit tile, return false.
+//     if (player.x != exitTile.x || player.y != exitTile.y) {
+//         return false;
+//     }
+//     //If we made it this far, then hopefully all of the tiles have been traversed, and we're on the exit tile.
+//     return true;
+// }
+
+function isGridColored() {
+    // Check if any tile isn't colored. If it is, bail out and return false.
+    for (let x = 0; x < gridSize; x++) {
+        for (let y = 0; y < gridSize; y++) {
+            if (gridTiles[x][y].isColored == false) {
                 return false;
             }
         }
     }
-    
-    //If we're not currently on the exit tile, return false.
-    if(player.x != tileToMakeExit.x || player.y != tileToMakeExit.y)
-    {
-        return false;
-    }
-    //If we made it this far, then hopefully all of the tiles have been traversed, and we're on the exit tile.
+
+    // If there are no uncolored tiles, return true.
     return true;
 }
-function loadNewLevel()
-{
-    if(levelNum == 1)
-    {
+
+function loadNewLevel() {
+    if (levelNum == 1) {
         levelNum = 2;
         loadLevelTwo();
 
-        
-}
-function loadLevelTwo(){
-    
-    gridTiles = [];
-    let gridXOffset = (sceneWidth / 2) - ((gridSize * tileSize) / 2) + tileSize / 2;
-    let gridYOffset = (sceneHeight / 2) - ((gridSize * tileSize) / 2) + tileSize / 2;
-        // For each column of the grid, make an array inside the macro array
-    for (let x = 0; x < gridSize; x++) {
-        gridTiles[x] = [];
 
-        // For every row of above column, add a new tile to that spot
-        for (let y = 0; y < gridSize; y++) {
-            // The grid offset is the starting position of the grid. The position is then shifted over by
-            // however many tiles we're currently at in this for loop.
-            gridTiles[x][y] = new Tile(
-                tileSize,
-                gridXOffset + tileSize * x,
-                gridYOffset + tileSize * y,
-                true
-            );
-
-            // Once we've positioned the new tile, add it to the stage.
-            app.stage.addChild(gridTiles[x][y]);
-        }
     }
+    function loadLevelTwo() {
 
-    let tileToMakeExit = gridTiles[gridSize - 1][gridSize - 1];
-    let exitXPos = tileToMakeExit.x;
-    let exitYPos = tileToMakeExit.y;
-    tileToMakeExit = new Exit(
-        tileSize,
-        exitXPos,
-        exitYPos,
-        0xFFFFFF
-    )
-    gridTiles[gridSize - 1][gridSize - 1] = tileToMakeExit;
-    app.stage.addChild(tileToMakeExit);
+        gridTiles = [];
+        let gridXOffset = (sceneWidth / 2) - ((gridSize * tileSize) / 2) + tileSize / 2;
+        let gridYOffset = (sceneHeight / 2) - ((gridSize * tileSize) / 2) + tileSize / 2;
+        // For each column of the grid, make an array inside the macro array
+        for (let x = 0; x < gridSize; x++) {
+            gridTiles[x] = [];
+
+            // For every row of above column, add a new tile to that spot
+            for (let y = 0; y < gridSize; y++) {
+                // The grid offset is the starting position of the grid. The position is then shifted over by
+                // however many tiles we're currently at in this for loop.
+                gridTiles[x][y] = new Tile(
+                    tileSize,
+                    gridXOffset + tileSize * x,
+                    gridYOffset + tileSize * y,
+                    true
+                );
+
+                // Once we've positioned the new tile, add it to the stage.
+                app.stage.addChild(gridTiles[x][y]);
+            }
+        }
+
+        let exitTile = gridTiles[gridSize - 1][gridSize - 1];
+        let exitXPos = exitTile.x;
+        let exitYPos = exitTile.y;
+        exitTile = new Exit(
+            tileSize,
+            exitXPos,
+            exitYPos,
+            0xFFFFFF
+        )
+        gridTiles[gridSize - 1][gridSize - 1] = exitTile;
+        app.stage.addChild(exitTile);
     }
     player = new PIXI.Sprite.from("Media/Brio-Sprite.png");
     player.anchor.set(0.5);
