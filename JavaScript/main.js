@@ -252,8 +252,33 @@ function isInBounds(xPosToCheck, yPosToCheck) {
     return true;
 }
 
+// Checks to see if the player can't move.
 function isPlayerTrapped() {
+    // First, get the current index of the player.
+    let currentIndex = getIndexAtCoords(player.x, player.y);
 
+    let leftInd = gridTiles[currentIndex.x - 1][currentIndex.y];
+    let rightInd = gridTiles[currentIndex.x + 1][currentIndex.y];
+    let upInd = gridTiles[currentIndex.x][currentIndex.y - 1];
+    let downInd = gridTiles[currentIndex.x][currentIndex.y + 1];
+
+    // Now check and see if there are any tiles the player can move to.
+    // We do this by checking if each tile around the player exists and isn't colored. If so, the player can move.
+    if (leftInd && !leftInd.isColored) {
+        return false;
+    }
+    if (rightInd && !leftInd.isColored) {
+        return false;
+    }
+    if (upInd && !leftInd.isColored) {
+        return false;
+    }
+    if (downInd && !leftInd.isColored) {
+        return false;
+    }
+
+    // If none of the above tiles meet the criteria, the player can't move.
+    return true;
 }
 
 // Gets a a tile on the grid from a pair of coordinates. Returns null if no tile at exists at given coords.
