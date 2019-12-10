@@ -160,10 +160,10 @@ function update() {
         }
     }
 
-    // Checks if player cannot move, and if so, if the level is not complete
-    if (isPlayerTrapped() && isGridColored()) {
-        // Lose code and stuff, for now just resets the level
-    }
+    // // Checks if player cannot move, and if so, if the level is not complete
+    // if (isPlayerTrapped() && isGridColored()) {
+    //     // Lose code and stuff, for now just resets the level
+    // }
 }
 
 // On key press, set the corresponding index to true
