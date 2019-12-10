@@ -214,7 +214,7 @@ function movePlayer(isHorizontal, isPositive) {
         // Gets the tile at the new position and only moves the player / updates tint if said tile exists.
         // Also disallows backtracking over tiles that are already colored.
         let moveIndex = getIndexAtCoords(player.x + amount, player.y);
-        let tileMovedOnto = gridTiles[moveIndex.x][moveIndex.y];
+        let tileMovedOnto = moveIndex ? gridTiles[moveIndex.x][moveIndex.y] : null;
         if (tileMovedOnto && !tileMovedOnto.isColored) {
             player.x += amount;
 
@@ -225,7 +225,7 @@ function movePlayer(isHorizontal, isPositive) {
         // Gets the tile at the new position and only moves the player / updates tint if said tile exists.
         // Also disallows backtracking over tiles that are already colored.
         let moveIndex = getIndexAtCoords(player.x, player.y + amount);
-        let tileMovedOnto = gridTiles[moveIndex.x][moveIndex.y];
+        let tileMovedOnto = moveIndex ? gridTiles[moveIndex.x][moveIndex.y] : null;
         if (tileMovedOnto && !tileMovedOnto.isColored) {
             player.y += amount;
 
@@ -257,23 +257,24 @@ function isPlayerTrapped() {
     // First, get the current index of the player.
     let currentIndex = getIndexAtCoords(player.x, player.y);
 
-    let leftInd = gridTiles[currentIndex.x - 1][currentIndex.y];
-    let rightInd = gridTiles[currentIndex.x + 1][currentIndex.y];
-    let upInd = gridTiles[currentIndex.x][currentIndex.y - 1];
-    let downInd = gridTiles[currentIndex.x][currentIndex.y + 1];
+    // Next, set references to all the tiles around the player. If the indices are out of range, set the ref to null.
+    let leftInd = currentIndex.x < 1 ? null : gridTiles[currentIndex.x - 1][currentIndex.y];
+    let rightInd = currentIndex.x >= gridSize - 1 ? null : gridTiles[currentIndex.x + 1][currentIndex.y];
+    let upInd = currentIndex.y < 1 ? null : gridTiles[currentIndex.x][currentIndex.y - 1];
+    let downInd = currentIndex >= gridSize - 1 ? null : gridTiles[currentIndex.x][currentIndex.y + 1];
 
     // Now check and see if there are any tiles the player can move to.
     // We do this by checking if each tile around the player exists and isn't colored. If so, the player can move.
     if (leftInd && !leftInd.isColored) {
         return false;
     }
-    if (rightInd && !leftInd.isColored) {
+    if (rightInd && !rightInd.isColored) {
         return false;
     }
-    if (upInd && !leftInd.isColored) {
+    if (upInd && !upInd.isColored) {
         return false;
     }
-    if (downInd && !leftInd.isColored) {
+    if (downInd && !downInd.isColored) {
         return false;
     }
 
