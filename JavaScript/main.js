@@ -35,7 +35,7 @@ let levelNum = 1;       //Keeps track of what level we are on.
 // preload images, then fire setup function
 PIXI.loader.
     add(["Media/Brio-Sprite.png", "Media/Tile-Sprite.png", "Media/Exit-Sprite.png"]).
-    on("progress", e => { console.log(`|| ${e.progress}% loaded ||`) }).
+    on("progress", e => { console.log(`|| ${Math.round(e.progress)}% loaded ||`) }).
     load(setup)
     ;
 
