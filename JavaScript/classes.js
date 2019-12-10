@@ -1,5 +1,5 @@
 class Tile extends PIXI.Sprite {
-    constructor(size, x = 0, y = 0, canTraverse = true, tint = 0xFFFFFF) {
+    constructor(size, x = 0, y = 0, visible = true, tint = 0xFFFFFF) {
         super(PIXI.loader.resources["Media/Tile-Sprite.png"].texture);
 
         this.anchor.set(0.5, 0.5);
@@ -7,22 +7,10 @@ class Tile extends PIXI.Sprite {
         this.height = size;
         this.x = x;
         this.y = y;
-        this.canTraverse = canTraverse; //can this tile be moved onto?
-        this.tint = tint;               //since Tiles are white, tint = the color of the tile
-
-        // If the tile isn't traversable, it shouldn't be visible either
-        // Think of it like a "gap" in the grid
-        this.visible = canTraverse;
-
-        //If there's a gap then we just automatically assume it's traversed for the sake of level checking later.
-        if(this.visible == false)
-        {
-            this.isColored = true;
-        }
-        //Else we say that it isn't traversed yet.
-        else{
-            this.isColored = false;
-        }
+        this.visible = visible;         //can this tile be seen?
+        this.canTraverse = visible;     //can this tile be moved onto? (If it's not visible, no)
+        this.isColored = !this.visible; //has this tile been colored? (If not visible, can't be colored, so set to true for level end checking reasons)
+        this.tint = tint;               //since Tiles are in greyscale, tint = the color of the tile
     }
 
     // Check if the given position is the same as this tile's position.
@@ -52,6 +40,6 @@ class Exit extends Tile {
     constructor(size, x = 0, y = 0, tint = 0xFFFFFF) {
         super(size, x, y, true, tint)
 
-        this.texture = PIXI.Texture.from("Media/Exit-Sprite.png");
+        this.texture = PIXI.loader.resources["Media/Exit-Sprite.png"].texture;
     }
 }
