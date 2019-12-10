@@ -213,7 +213,7 @@ function movePlayer(isHorizontal, isPositive) {
 
         // Gets the tile at the new position and only moves the player / updates tint if said tile exists.
         // Also disallows backtracking over tiles that are already colored.
-        let moveIndex = getTileAtCoords(player.x + amount, player.y);
+        let moveIndex = getIndexAtCoords(player.x + amount, player.y);
         let tileMovedOnto = gridTiles[moveIndex.x][moveIndex.y];
         if (tileMovedOnto && !tileMovedOnto.isColored) {
             player.x += amount;
@@ -224,7 +224,7 @@ function movePlayer(isHorizontal, isPositive) {
     else {
         // Gets the tile at the new position and only moves the player / updates tint if said tile exists.
         // Also disallows backtracking over tiles that are already colored.
-        let moveIndex = getTileAtCoords(player.x, player.y + amount);
+        let moveIndex = getIndexAtCoords(player.x, player.y + amount);
         let tileMovedOnto = gridTiles[moveIndex.x][moveIndex.y];
         if (tileMovedOnto && !tileMovedOnto.isColored) {
             player.y += amount;
