@@ -26,6 +26,7 @@ const rightKey = 39;
 let gridSize = 11;
 let gridTiles = [];
 let exitTile;
+let startIndex;
 
 let player;
 let keysDown = {};      //Is the key at this index (code) currently down?
@@ -43,7 +44,11 @@ PIXI.loader.
 
 // Set up everything needed to run the game at start
 function setup() {
-    // Load the starting level up
+    // Assign player sprite image, set anchor to center of sprite, but don't add them to the scene yet
+    player = new PIXI.Sprite.from("Media/Brio-Sprite.png");
+    player.anchor.set(0.5);
+
+    // Load the starting level up, player is added in here
     LoadLevel(new Index(5, 5), new Index(gridSize - 1, gridSize - 1), undefined);
 
     // When user presses / releases a key, fire these functions
@@ -57,7 +62,7 @@ function setup() {
 // Loads a level with all the given parameters.
 function LoadLevel(playerIndex, exitIndex, gapIndexArray) {
     // First of all, reset the scene, so we have a fresh start to load onto.
-    ResetScene();
+    ClearScene();
 
     // Set the amount of offset from the edges of the scene the grid has
     // Currently set to be centered on the scene
@@ -103,14 +108,12 @@ function LoadLevel(playerIndex, exitIndex, gapIndexArray) {
     app.stage.addChild(exitTile);
 
     // Finally, we add the player to the scene
-    // Assign player sprite image, set anchor to center of sprite
-    player = new PIXI.Sprite.from("Media/Brio-Sprite.png");
-    player.anchor.set(0.5);
 
     // Adjust player then place them on screen
     player.width = tileSize;
     player.height = tileSize;
     player.position = gridTiles[playerIndex.x][playerIndex.y].position;
+    startIndex = new Index(playerIndex.x, playerIndex.y);
     player.tint = 0x00FF00;
     app.stage.addChild(player);
 
@@ -121,15 +124,33 @@ function LoadLevel(playerIndex, exitIndex, gapIndexArray) {
 // Removes all children from the stage, giving us a clean slate.
 // Thanks to https://www.html5gamedevs.com/topic/840-remove-all-children-from-a-stage/?do=findComment&comment=4707
 // for the idea on how to do this.
-function ResetScene() {
+function ClearScene() {
     for (let i = 0; i < app.stage.children.length - 1; i++) {
         app.stage.removeChild(app.stage.children[i]);
     }
 }
 
+function ResetLevel() {
+    //go through all the tiles and set them to be uncolored, if they're visible
+    for (let x = 0; x < gridSize; x++) {
+        for (let y = 0; y < gridSize; y++) {
+            if (gridTiles[x][y].visible) {
+                gridTiles[x][y].isColored = false;
+                gridTiles[x][y].tint = 0xFFFFFF;
+            }
+        }
+    }
+
+    // Put the player back where they started and color that starting tile
+    player.position = startPosition;
+    gridTiles[startIndex.x][startIndex.y].isColored = true;
+    gridTiles[startIndex.x][startIndex.y].updateColorTint();
+}
+
 // Update fires every frame; it's where basic game logic and whatnot updates!
 function update() {
     // Checks if the exit tile is colored, and if so, if every tile is colored
+    // Slightly redundant, but this structure prevents premature level endings
     if (exitTile.isColored) {
         if (isGridColored()) {
             console.log("Initiate level end");
@@ -137,6 +158,11 @@ function update() {
         else {
             console.log("Not all tiles are colored, level fail");
         }
+    }
+
+    // Checks if player cannot move, and if so, if the level is not complete
+    if (isPlayerTrapped() && isGridColored()) {
+        // Lose code and stuff, for now just resets the level
     }
 }
 
@@ -186,8 +212,9 @@ function movePlayer(isHorizontal, isPositive) {
     if (isHorizontal) {
 
         // Gets the tile at the new position and only moves the player / updates tint if said tile exists.
+        // Also disallows backtracking over tiles that are already colored.
         let tileMovedOnto = getTileAtCoords(player.x + amount, player.y);
-        if (tileMovedOnto) {
+        if (tileMovedOnto && !tileMovedOnto.isColored) {
             player.x += amount;
 
             tileMovedOnto.updateColorTint();
@@ -195,8 +222,9 @@ function movePlayer(isHorizontal, isPositive) {
     }
     else {
         // Gets the tile at the new position and only moves the player / updates tint if said tile exists.
+        // Also disallows backtracking over tiles that are already colored.
         let tileMovedOnto = getTileAtCoords(player.x, player.y + amount);
-        if (tileMovedOnto) {
+        if (tileMovedOnto && !tileMovedOnto.isColored) {
             player.y += amount;
 
             tileMovedOnto.updateColorTint();
@@ -254,6 +282,9 @@ function getTileAtCoords(xCoord, yCoord) {
 }
 
 function isGridColored() {
+    // Check if the exit tile is colored. If not, we don't need to check anything else
+    if (!exitTile.isColored) { return false }
+
     // Check if any tile isn't colored. If it is, bail out and return false.
     for (let x = 0; x < gridSize; x++) {
         for (let y = 0; y < gridSize; y++) {

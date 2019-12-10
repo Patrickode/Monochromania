@@ -24,7 +24,7 @@ class Tile extends PIXI.Sprite {
 
     updateColorTint() {
         //If the tint is green, we turn it back to white/gray.
-        if (this.tint == 0x00FF00) {
+        if (this.isColored) {
             this.tint = 0xFFFFFF;
             this.isColored = false;
         }
