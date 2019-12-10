@@ -13,6 +13,16 @@ class Tile extends PIXI.Sprite {
         // If the tile isn't traversable, it shouldn't be visible either
         // Think of it like a "gap" in the grid
         this.visible = canTraverse;
+
+        //If there's a gap then we just automatically assume it's traversed for the sake of level checking later.
+        if(this.visible == false)
+        {
+            this.isTraversed = true;
+        }
+        //Else we say that it isn't traversed yet.
+        else{
+            this.isTraversed = false;
+        }
     }
 
     // Check if the given position is the same as this tile's position.
@@ -28,10 +38,12 @@ class Tile extends PIXI.Sprite {
         //If the tint is green, we turn it back to white/gray.
         if (this.tint == 0x00FF00) {
             this.tint = 0xFFFFFF;
+            this.isTraversed = false;
         }
         //Else if it's not, we turn it to green.
         else {
             this.tint = 0x00FF00;
+            this.isTraversed = true;
         }
     }
 }
