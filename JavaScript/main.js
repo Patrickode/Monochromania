@@ -159,10 +159,11 @@ function update() {
         }
     }
 
-    // // Checks if player cannot move, and if so, if the level is not complete
-    // if (isPlayerTrapped() && isGridColored()) {
-    //     // Lose code and stuff, for now just resets the level
-    // }
+    // Checks if player cannot move, and if so, if the level is not complete
+    if (isPlayerTrapped() && isGridColored()) {
+        // Lose code and stuff, for now just resets the level
+        ResetLevel();
+    }
 }
 
 // On key press, set the corresponding index to true
@@ -212,7 +213,8 @@ function movePlayer(isHorizontal, isPositive) {
 
         // Gets the tile at the new position and only moves the player / updates tint if said tile exists.
         // Also disallows backtracking over tiles that are already colored.
-        let tileMovedOnto = getTileAtCoords(player.x + amount, player.y);
+        let moveIndex = getTileAtCoords(player.x + amount, player.y);
+        let tileMovedOnto = gridTiles[moveIndex.x][moveIndex.y];
         if (tileMovedOnto && !tileMovedOnto.isColored) {
             player.x += amount;
 
@@ -222,7 +224,8 @@ function movePlayer(isHorizontal, isPositive) {
     else {
         // Gets the tile at the new position and only moves the player / updates tint if said tile exists.
         // Also disallows backtracking over tiles that are already colored.
-        let tileMovedOnto = getTileAtCoords(player.x, player.y + amount);
+        let moveIndex = getTileAtCoords(player.x, player.y + amount);
+        let tileMovedOnto = gridTiles[moveIndex.x][moveIndex.y];
         if (tileMovedOnto && !tileMovedOnto.isColored) {
             player.y += amount;
 
@@ -249,8 +252,12 @@ function isInBounds(xPosToCheck, yPosToCheck) {
     return true;
 }
 
+function isPlayerTrapped() {
+
+}
+
 // Gets a a tile on the grid from a pair of coordinates. Returns null if no tile at exists at given coords.
-function getTileAtCoords(xCoord, yCoord) {
+function getIndexAtCoords(xCoord, yCoord) {
     // Before we do any looping, check to see if the coords are out of bounds. Bail out early if so.
     if (!isInBounds(xCoord, yCoord)) {
         return null;
@@ -267,7 +274,7 @@ function getTileAtCoords(xCoord, yCoord) {
 
                 // Check if the y matches the position we're at, and if it does, return the tile here.
                 if (gridTiles[x][y].comparePositions(xCoord, yCoord)) {
-                    return gridTiles[x][y];
+                    return new Index(x, y);
                 }
             }
 
