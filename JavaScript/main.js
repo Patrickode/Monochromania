@@ -142,7 +142,7 @@ function ResetLevel() {
     }
 
     // Put the player back where they started and color that starting tile
-    player.position = gridTiles[startIndex.x][gridTiles.startIndex.y].position;
+    player.position = gridTiles[startIndex.x][startIndex.y].position;
     gridTiles[startIndex.x][startIndex.y].isColored = true;
     gridTiles[startIndex.x][startIndex.y].updateColorTint();
 }
