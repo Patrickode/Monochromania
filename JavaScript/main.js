@@ -52,8 +52,23 @@ function setup() {
     player = new PIXI.Sprite.from("Media/Brio-Sprite.png");
     player.anchor.set(0.5);
 
+    // Set player and exit index to random indices that aren't on the edge of the grid.
+    let playInd = new Index(randomInteger(1, gridSize - 1), randomInteger(1, gridSize - 1));
+    let exitInd = new Index(randomInteger(1, gridSize - 1), randomInteger(1, gridSize - 1));
+
+    // Set a random number of gaps, for that many gaps, make a random index.
+    let numGaps = randomInteger(0, 5);
+    let gapInds = [];
+    for (let i = 0; i < numgaps; i++) {
+        gapInds[i] = new Index(randomInteger(0, gridSize))
+    }
+
+    // Set two random colors to be the base and player colors.
+    let bColorInd = randomInteger(0, colorArray.length);
+    let pColorInd = randomInteger(0, colorArray.length);
+
     // Load the starting level up, player is added in here
-    LoadLevel(new Index(5, 5), new Index(gridSize - 1, gridSize - 1), undefined, colorArray[0], colorArray[3]);
+    LoadLevel(new Index(5, 5), new Index(gridSize - 1, gridSize - 1), gapInds, bColorInd, pColorInd);
 
     // When user presses / releases a key, fire these functions
     window.addEventListener("keydown", onKeysDown);
@@ -84,13 +99,15 @@ function update() {
 }
 
 // Loads a level with all the given parameters.
-function LoadLevel(playerIndex, exitIndex, gapIndexArray, bColor, pColor) {
+function LoadLevel(playerIndex, exitIndex, gapIndexArray, bColorInd, pColorInd) {
     // First of all, reset the scene, so we have a fresh start to load onto.
     ClearScene();
 
     // Next, decide what the base and player color will be.
-    baseColor = bColor;
-    playerColor = pColor;
+    // If player color isn't base color, assign player color normally. Otherwise, if pcolor is too big, subtract one, and if not, add one.
+    // This ensures the base color and player color aren't the same.
+    baseColor = colorArray[bColorInd]
+    playerColor = pColorInd != bColorInd ? colorArray[pColorInd] : pColorInd >= colorArray.length ? colorArray[pColorInd - 1] : colorArray[pColorInd + 1];
 
     // Set the amount of offset from the edges of the scene the grid has
     // Currently set to be centered on the scene
