@@ -55,8 +55,8 @@ function setup() {
     player = new PIXI.Sprite.from("Media/Brio-Sprite.png");
     player.anchor.set(0.5);
 
-    //make a random level
-    MakeRandomLevel();
+    // Make level 1.
+    MakeLevelOne();
 
     // When user presses / releases a key, fire these functions
     window.addEventListener("keydown", onKeysDown);
@@ -397,3 +397,30 @@ function isGridColored() {
 // Get a random integer between min (inclusive) and max (exclusive).
 // Thanks to https://www.w3schools.com/js/js_random.asp for reminding / reteaching me how to do this.
 function randomInteger(min, max) { return Math.floor(Math.random() * (max - min)) + min; }
+
+
+// --- Manual Level Creation Code --- \\
+
+
+function MakeLevelOne() {
+    let playInd = new Index(0, 5);
+    let exitInd = new Index(10, 5);
+
+    let gapInds = GetRectArray(new Index(0, 0), new Index(10, 4));
+    gapInds = gapInds.concat(GetRectArray(new Index(0, 6), new Index(10, 10)));
+
+    LoadLevel(playInd, exitInd, gapInds);
+}
+
+// Returns a rectangle of indices, starting from topLeftInd and ending at bottomRightInd, in an array format.
+function GetRectArray(topLeftInd, bottomRightInd) {
+    let rectArray = [];
+    let iterator = 0;
+    for (let x = topLeftInd.x; x < bottomRightInd.x + 1; x++) {
+        for (let y = topLeftInd.y; y < bottomRightInd.y + 1; y++) {
+            rectArray[iterator] = new Index(x, y);
+            iterator++;
+        }
+    }
+    return rectArray;
+}
