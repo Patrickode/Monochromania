@@ -1,5 +1,5 @@
 class Tile extends PIXI.Sprite {
-    constructor(size, x = 0, y = 0, visible = true, tint = 0xFFFFFF) {
+    constructor(size, x = 0, y = 0, tint = 0xFFFFFF, visible = true) {
         super(PIXI.loader.resources["Media/Tile-Sprite.png"].texture);
 
         this.anchor.set(0.5, 0.5);
@@ -22,23 +22,23 @@ class Tile extends PIXI.Sprite {
         return xToCompare === this.x && yToCompare === this.y
     };
 
-    updateColorTint() {
-        //If the tint is green, we turn it back to white/gray.
-        if (this.isColored) {
-            this.tint = 0xFFFFFF;
-            this.isColored = false;
-        }
-        //Else if it's not, we turn it to green.
-        else {
-            this.tint = 0x00FF00;
+    updateColor(colored, baseColor, playerColor) {
+        //If the tile is being colored, make it the player color.
+        if (colored) {
             this.isColored = true;
+            this.tint = playerColor;
+        }
+        //If the tile is being "uncolored," turn it to the base color.
+        else {
+            this.isColored = false;
+            this.tint = baseColor;
         }
     }
 }
 
 class Exit extends Tile {
     constructor(size, x = 0, y = 0, tint = 0xFFFFFF) {
-        super(size, x, y, true, tint)
+        super(size, x, y, tint, true)
 
         this.texture = PIXI.loader.resources["Media/Exit-Sprite.png"].texture;
     }

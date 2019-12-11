@@ -9,6 +9,8 @@ document.body.appendChild(app.view);
 const sceneWidth = app.view.width;
 const sceneHeight = app.view.height;
 const tileSize = 50;
+//red, orange, yellow, green, cyan, pink
+const colorArray = [0xFF0000, 0xFF7F00, 0xFFFF00, 0x00FF00, 0x00FFFF, 0xFF00FF];
 
 // #region Key Codes
 const wKey = 87;
@@ -27,6 +29,8 @@ let gridSize = 11;
 let gridTiles = [];
 let exitTile;
 let startIndex;
+let baseColor;
+let playerColor;
 
 let player;
 let keysDown = {};      //Is the key at this index (code) currently down?
@@ -64,6 +68,10 @@ function LoadLevel(playerIndex, exitIndex, gapIndexArray) {
     // First of all, reset the scene, so we have a fresh start to load onto.
     ClearScene();
 
+    // Next, decide what the base and player color will be.
+    baseColor = colorArray[0];
+    playerColor = colorArray[3];
+
     // Set the amount of offset from the edges of the scene the grid has
     // Currently set to be centered on the scene
     let gridXOffset = (sceneWidth / 2) - ((gridSize * tileSize) / 2) + tileSize / 2;
@@ -81,7 +89,7 @@ function LoadLevel(playerIndex, exitIndex, gapIndexArray) {
                 tileSize,
                 gridXOffset + tileSize * x,
                 gridYOffset + tileSize * y,
-                true
+                baseColor
             );
 
             // Once we've positioned the new tile, add it to the stage.
@@ -102,7 +110,7 @@ function LoadLevel(playerIndex, exitIndex, gapIndexArray) {
         tileSize,
         exitXPos,
         exitYPos,
-        0xFFFFFF
+        baseColor
     )
     gridTiles[exitIndex.x][exitIndex.y] = exitTile;
     app.stage.addChild(exitTile);
@@ -114,11 +122,11 @@ function LoadLevel(playerIndex, exitIndex, gapIndexArray) {
     player.height = tileSize;
     player.position = gridTiles[playerIndex.x][playerIndex.y].position;
     startIndex = new Index(playerIndex.x, playerIndex.y);
-    player.tint = 0x00FF00;
+    player.tint = playerColor;
     app.stage.addChild(player);
 
     // The player's now on their starting tile, so update that tile to be their color.
-    gridTiles[playerIndex.x][playerIndex.y].updateColorTint();
+    gridTiles[playerIndex.x][playerIndex.y].updateColor(true, baseColor, playerColor);
 }
 
 // Removes all children from the stage, giving us a clean slate.
@@ -135,15 +143,14 @@ function ResetLevel() {
     for (let x = 0; x < gridSize; x++) {
         for (let y = 0; y < gridSize; y++) {
             if (gridTiles[x][y].visible) {
-                gridTiles[x][y].isColored = false;
-                gridTiles[x][y].tint = 0xFFFFFF;
+                gridTiles[x][y].updateColor(false, baseColor, playerColor);
             }
         }
     }
 
     // Put the player back where they started and color that starting tile
     player.position = gridTiles[startIndex.x][startIndex.y].position;
-    gridTiles[startIndex.x][startIndex.y].updateColorTint();
+    gridTiles[startIndex.x][startIndex.y].updateColor(true, baseColor, playerColor);
 }
 
 // Update fires every frame; it's where basic game logic and whatnot updates!
@@ -155,7 +162,7 @@ function update() {
             console.log("Initiate level end");
         }
         else {
-            console.log("Not all tiles are colored, level fail");
+            ResetLevel();
         }
     }
 
@@ -218,7 +225,7 @@ function movePlayer(isHorizontal, isPositive) {
         if (tileMovedOnto && !tileMovedOnto.isColored) {
             player.x += amount;
 
-            tileMovedOnto.updateColorTint();
+            tileMovedOnto.updateColor(true, baseColor, playerColor);
         }
     }
     else {
@@ -229,7 +236,7 @@ function movePlayer(isHorizontal, isPositive) {
         if (tileMovedOnto && !tileMovedOnto.isColored) {
             player.y += amount;
 
-            tileMovedOnto.updateColorTint();
+            tileMovedOnto.updateColor(true, baseColor, playerColor);
         }
     }
 }
