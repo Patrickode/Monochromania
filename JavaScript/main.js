@@ -138,7 +138,7 @@ function LoadLevel(playerIndex, exitIndex, gapIndexArray, bColorInd, pColorInd) 
 
     // First, make all the tiles at the indices inside gapIndexArray into gaps
     for (let i = 0; i < gapIndexArray.length; i++) {
-        gridTiles[gapIndexArray[i].x, gapIndexArray[i].y].makeGap();
+        gridTiles[gapIndexArray[i].x, gapIndexArray[i].y].setGap(true);
     }
 
     // Now make the exit tile, and put it at the specified index
@@ -165,7 +165,8 @@ function LoadLevel(playerIndex, exitIndex, gapIndexArray, bColorInd, pColorInd) 
     player.tint = playerColor;
     app.stage.addChild(player);
 
-    // The player's now on their starting tile, so update that tile to be their color.
+    // The player's now on their starting tile, so update that tile to be their color, and make it not be a gap if it is one.
+    gridTiles[playerIndex.x][playerIndex.y].setGap(false);
     gridTiles[playerIndex.x][playerIndex.y].updateColor(true, baseColor, playerColor);
 }
 

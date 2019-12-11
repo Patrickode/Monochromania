@@ -37,10 +37,11 @@ class Tile extends PIXI.Sprite {
         }
     }
 
-    makeGap() {
-        this.visible = false;
-        this.canTraverse = false;
-        this.isColored = true;
+    // Makes this tile a gap, or makes it normal, depending on the boolean passed in.
+    setGap(isGap) {
+        this.visible = !isGap;
+        this.canTraverse = !isGap;
+        this.isColored = isGap;
     }
 }
 
