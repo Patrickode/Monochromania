@@ -243,7 +243,7 @@ function movePlayer(isHorizontal, isPositive) {
         // Also disallows backtracking over tiles that are already colored.
         let moveIndex = getIndexAtCoords(player.x + amount, player.y);
         let tileMovedOnto = moveIndex ? gridTiles[moveIndex.x][moveIndex.y] : null;
-        if (tileMovedOnto && !tileMovedOnto.isColored) {
+        if (tileMovedOnto && tileMovedOnto.canTraverse) {
             player.x += amount;
 
             tileMovedOnto.updateColor(true, baseColor, playerColor);
@@ -254,7 +254,7 @@ function movePlayer(isHorizontal, isPositive) {
         // Also disallows backtracking over tiles that are already colored.
         let moveIndex = getIndexAtCoords(player.x, player.y + amount);
         let tileMovedOnto = moveIndex ? gridTiles[moveIndex.x][moveIndex.y] : null;
-        if (tileMovedOnto && !tileMovedOnto.isColored) {
+        if (tileMovedOnto && tileMovedOnto.canTraverse) {
             player.y += amount;
 
             tileMovedOnto.updateColor(true, baseColor, playerColor);
@@ -292,17 +292,17 @@ function isPlayerTrapped() {
     let downInd = currentIndex >= gridSize - 1 ? null : gridTiles[currentIndex.x][currentIndex.y + 1];
 
     // Now check and see if there are any tiles the player can move to.
-    // We do this by checking if each tile around the player exists and isn't colored. If so, the player can move.
-    if (leftInd && !leftInd.isColored) {
+    // We do this by checking if each tile around the player exists and can be traversed. If so, the player can move.
+    if (leftInd && leftInd.canTraverse) {
         return false;
     }
-    if (rightInd && !rightInd.isColored) {
+    if (rightInd && rightInd.canTraverse) {
         return false;
     }
-    if (upInd && !upInd.isColored) {
+    if (upInd && upInd.canTraverse) {
         return false;
     }
-    if (downInd && !downInd.isColored) {
+    if (downInd && downInd.canTraverse) {
         return false;
     }
 
