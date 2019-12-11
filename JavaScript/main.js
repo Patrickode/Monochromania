@@ -92,7 +92,7 @@ function LoadLevel(playerIndex, exitIndex, gapIndexArray, bColorInd, pColorInd) 
     // If player color isn't base color, assign player color normally. Otherwise, if pcolor is too big, subtract one, and if not, add one.
     // This ensures the base color and player color aren't the same.
     baseColor = colorArray[bColorInd]
-    playerColor = pColorInd != bColorInd ? colorArray[pColorInd] : pColorInd >= colorArray.length ? colorArray[pColorInd - 1] : colorArray[pColorInd + 1];
+    playerColor = pColorInd != bColorInd ? colorArray[pColorInd] : pColorInd >= colorArray.length - 1 ? colorArray[pColorInd - 1] : colorArray[pColorInd + 1];
 
     // Set the amount of offset from the edges of the scene the grid has
     // Currently set to be centered on the scene
