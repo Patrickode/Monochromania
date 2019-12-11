@@ -52,23 +52,8 @@ function setup() {
     player = new PIXI.Sprite.from("Media/Brio-Sprite.png");
     player.anchor.set(0.5);
 
-    // Set player and exit index to random indices that aren't on the edge of the grid.
-    let playInd = new Index(randomInteger(1, gridSize - 1), randomInteger(1, gridSize - 1));
-    let exitInd = new Index(randomInteger(1, gridSize - 1), randomInteger(1, gridSize - 1));
-
-    // Set a random number of gaps, for that many gaps, make a random index.
-    let numGaps = randomInteger(0, 5);
-    let gapInds = [];
-    for (let i = 0; i < numGaps; i++) {
-        gapInds[i] = new Index(randomInteger(1, gridSize - 1), randomInteger(1, gridSize - 1))
-    }
-
-    // Set two random colors to be the base and player colors.
-    let bColorInd = randomInteger(0, colorArray.length);
-    let pColorInd = randomInteger(0, colorArray.length);
-
-    // Load the starting level up, player is added in here
-    LoadLevel(playInd, exitInd, gapInds, bColorInd, pColorInd);
+    //make a random level
+    MakeRandomLevel();
 
     // When user presses / releases a key, fire these functions
     window.addEventListener("keydown", onKeysDown);
@@ -84,7 +69,7 @@ function update() {
     // Slightly redundant, but this structure prevents premature level endings
     if (exitTile.isColored) {
         if (isGridColored()) {
-            console.log("Initiate level end");
+            MakeRandomLevel();
         }
         else {
             ResetLevel();
@@ -168,6 +153,26 @@ function LoadLevel(playerIndex, exitIndex, gapIndexArray, bColorInd, pColorInd) 
     // The player's now on their starting tile, so update that tile to be their color, and make it not be a gap if it is one.
     gridTiles[playerIndex.x][playerIndex.y].setGap(false);
     gridTiles[playerIndex.x][playerIndex.y].updateColor(true, baseColor, playerColor);
+}
+
+function MakeRandomLevel() {
+    // Set player and exit index to random indices.
+    let playInd = new Index(randomInteger(0, gridSize), randomInteger(0, gridSize));
+    let exitInd = new Index(randomInteger(0, gridSize), randomInteger(0, gridSize));
+
+    // Set a random number of gaps, for that many gaps, make a random index.
+    let numGaps = randomInteger(0, 5);
+    let gapInds = [];
+    for (let i = 0; i < numGaps; i++) {
+        gapInds[i] = new Index(randomInteger(1, gridSize - 1), randomInteger(1, gridSize - 1))
+    }
+
+    // Set two random colors to be the base and player colors.
+    let bColorInd = randomInteger(0, colorArray.length);
+    let pColorInd = randomInteger(0, colorArray.length);
+
+    // Load the starting level up, player is added in here
+    LoadLevel(playInd, exitInd, gapInds, bColorInd, pColorInd);
 }
 
 // Removes all children from the stage, giving us a clean slate.
