@@ -69,20 +69,18 @@ function setup() {
 // Update fires every frame; it's where basic game logic and whatnot updates!
 function update() {
     // If the grid is colored, and the player is on the exit, the level's been completed, make a new one
-    if (exitTile.isColored && isGridColored()) {
-        if (player.x == exitTile.x && player.y == exitTile.y) {
-            // This section sets makingLevel to true to prevent additional calls, pauses for some milliseconds,
-            // and once it's done pausing, makes a random level and sets makingLevel to false, since it's done now.
-            if (!makingLevel) {
-                makingLevel = true;
-                window.setTimeout(
-                    function () {
-                        MakeRandomLevel();
-                        makingLevel = false;
-                    },
-                    1000
-                );
-            }
+    if (isGridColored() && (player.x == exitTile.x && player.y == exitTile.y)) {
+        // This section sets makingLevel to true to prevent additional calls, pauses for some milliseconds,
+        // and once it's done pausing, makes a random level and sets makingLevel to false, since it's done now.
+        if (!makingLevel) {
+            makingLevel = true;
+            window.setTimeout(
+                function () {
+                    MakeRandomLevel();
+                    makingLevel = false;
+                },
+                1000
+            );
         }
     }
 
@@ -387,7 +385,7 @@ function isGridColored() {
     // Check if any tile isn't colored. If it is, bail out and return false.
     for (let x = 0; x < gridSize; x++) {
         for (let y = 0; y < gridSize; y++) {
-            if (gridTiles[x][y].isColored == false && gridTiles[x][y] != exitTile) {
+            if (gridTiles[x][y].isColored == false) {
                 return false;
             }
         }
