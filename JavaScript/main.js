@@ -9,8 +9,8 @@ document.body.appendChild(app.view);
 const sceneWidth = app.view.width;
 const sceneHeight = app.view.height;
 const tileSize = 50;
-//red, orange, yellow, green, cyan, pink
-const colorArray = [0xFF0000, 0xFF7F00, 0xFFFF00, 0x00FF00, 0x00FFFF, 0xFF00FF];
+//red, orange, yellow, green, cyan, purple, pink
+const colorArray = [0xFF0000, 0xFF7F00, 0xFFFF00, 0x00FF00, 0x00FFFF, 0x9400D3, 0xFF00FF];
 
 // #region Key Codes
 const wKey = 87;
