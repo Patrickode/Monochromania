@@ -26,13 +26,21 @@ class Tile extends PIXI.Sprite {
         //If the tile is being colored, make it the player color.
         if (colored) {
             this.isColored = true;
+            this.canTraverse = false;
             this.tint = playerColor;
         }
         //If the tile is being "uncolored," turn it to the base color.
         else {
             this.isColored = false;
+            this.canTraverse = true;
             this.tint = baseColor;
         }
+    }
+
+    makeGap() {
+        this.visible = false;
+        this.canTraverse = false;
+        this.isColored = true;
     }
 }
 

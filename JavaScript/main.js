@@ -136,10 +136,13 @@ function LoadLevel(playerIndex, exitIndex, gapIndexArray, bColorInd, pColorInd) 
 
     // Now that we've made the grid, we need to adjust some tiles
 
-    // First, make all the tiles at the indices inside gapIndexArray not traversable
-    // !TODO!
+    // First, make all the tiles at the indices inside gapIndexArray into gaps
+    for (let i = 0; i < gapIndexArray.length; i++) {
+        gridTiles[gapIndexArray[i].x, gapIndexArray[i].y].makeGap();
+    }
 
     // Now make the exit tile, and put it at the specified index
+    // If this overlaps with a gap, it doesn't matter, because we're overwriting it
     exitTile = gridTiles[exitIndex.x][exitIndex.y];
     let exitXPos = exitTile.x;
     let exitYPos = exitTile.y;
