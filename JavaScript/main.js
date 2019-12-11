@@ -53,7 +53,7 @@ function setup() {
     player.anchor.set(0.5);
 
     // Load the starting level up, player is added in here
-    LoadLevel(new Index(5, 5), new Index(gridSize - 1, gridSize - 1), undefined);
+    LoadLevel(new Index(5, 5), new Index(gridSize - 1, gridSize - 1), undefined, colorArray[0], colorArray[3]);
 
     // When user presses / releases a key, fire these functions
     window.addEventListener("keydown", onKeysDown);
@@ -84,13 +84,13 @@ function update() {
 }
 
 // Loads a level with all the given parameters.
-function LoadLevel(playerIndex, exitIndex, gapIndexArray) {
+function LoadLevel(playerIndex, exitIndex, gapIndexArray, bColor, pColor) {
     // First of all, reset the scene, so we have a fresh start to load onto.
     ClearScene();
 
     // Next, decide what the base and player color will be.
-    baseColor = colorArray[0];
-    playerColor = colorArray[3];
+    baseColor = bColor;
+    playerColor = pColor;
 
     // Set the amount of offset from the edges of the scene the grid has
     // Currently set to be centered on the scene
