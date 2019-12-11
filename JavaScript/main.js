@@ -63,6 +63,26 @@ function setup() {
     app.ticker.add(update);
 }
 
+// Update fires every frame; it's where basic game logic and whatnot updates!
+function update() {
+    // Checks if the exit tile is colored, and if so, if every tile is colored
+    // Slightly redundant, but this structure prevents premature level endings
+    if (exitTile.isColored) {
+        if (isGridColored()) {
+            console.log("Initiate level end");
+        }
+        else {
+            ResetLevel();
+        }
+    }
+
+    // Checks if player cannot move, and if so, if the level is not complete
+    if (isPlayerTrapped() && !isGridColored()) {
+        // Lose code and stuff, for now just resets the level
+        ResetLevel();
+    }
+}
+
 // Loads a level with all the given parameters.
 function LoadLevel(playerIndex, exitIndex, gapIndexArray) {
     // First of all, reset the scene, so we have a fresh start to load onto.
@@ -151,26 +171,6 @@ function ResetLevel() {
     // Put the player back where they started and color that starting tile
     player.position = gridTiles[startIndex.x][startIndex.y].position;
     gridTiles[startIndex.x][startIndex.y].updateColor(true, baseColor, playerColor);
-}
-
-// Update fires every frame; it's where basic game logic and whatnot updates!
-function update() {
-    // Checks if the exit tile is colored, and if so, if every tile is colored
-    // Slightly redundant, but this structure prevents premature level endings
-    if (exitTile.isColored) {
-        if (isGridColored()) {
-            console.log("Initiate level end");
-        }
-        else {
-            ResetLevel();
-        }
-    }
-
-    // Checks if player cannot move, and if so, if the level is not complete
-    if (isPlayerTrapped() && !isGridColored()) {
-        // Lose code and stuff, for now just resets the level
-        ResetLevel();
-    }
 }
 
 // On key press, set the corresponding index to true
