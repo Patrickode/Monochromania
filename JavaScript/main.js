@@ -32,6 +32,9 @@ let startIndex;
 let baseColor;
 let playerColor;
 
+let makingLevel = false;
+let resettingLevel = false;
+
 let player;
 let keysDown = {};      //Is the key at this index (code) currently down?
 let downLastFrame = {}; //Was the key at this index (code) down last frame?
@@ -65,15 +68,40 @@ function setup() {
 
 // Update fires every frame; it's where basic game logic and whatnot updates!
 function update() {
-    // If the grid is colored, the level's been completed, make a new one
+    // If the grid is colored, and the player is on the exit, the level's been completed, make a new one
     if (exitTile.isColored && isGridColored()) {
-        // MakeRandomLevel();
-        window.setTimeout(MakeRandomLevel, 1000);
+        if (player.x == exitTile.x && player.y == exitTile.y) {
+            // This section sets makingLevel to true to prevent additional calls, pauses for some milliseconds,
+            // and once it's done pausing, makes a random level and sets makingLevel to false, since it's done now.
+            if (!makingLevel) {
+                makingLevel = true;
+                window.setTimeout(
+                    function () {
+                        MakeRandomLevel();
+                        makingLevel = false;
+                    },
+                    1000
+                );
+            }
+        }
     }
 
-    // Checks if player cannot move, and if so, if the level is not complete
-    if (isPlayerTrapped() && !isGridColored()) {
-        window.setTimeout(ResetLevel, 1000);
+    // Checks if player cannot move.
+    if (isPlayerTrapped()) {
+        // Only reset if the level is not complete.
+        if (!((player.x == exitTile.x && player.y == exitTile.y) && isGridColored())) {
+            // See makingLevel comment above. Pauses for some milliseconds, and resets the level, preventing extra calls.
+            if (!resettingLevel) {
+                resettingLevel = true;
+                window.setTimeout(
+                    function () {
+                        ResetLevel();
+                        resettingLevel = false;
+                    },
+                    1000
+                );
+            }
+        }
     }
 }
 
