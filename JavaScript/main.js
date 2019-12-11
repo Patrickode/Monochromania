@@ -65,13 +65,6 @@ function setup() {
 
 // Update fires every frame; it's where basic game logic and whatnot updates!
 function update() {
-    if (isGridColored()) {
-        exitTile.canTraverse = true;
-    }
-    else {
-        exitTile.canTraverse = false;
-    }
-
     // If the grid is colored, the level's been completed, make a new one
     if (exitTile.isColored && isGridColored()) {
         // MakeRandomLevel();
