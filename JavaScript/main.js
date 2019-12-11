@@ -59,8 +59,8 @@ function setup() {
     // Set a random number of gaps, for that many gaps, make a random index.
     let numGaps = randomInteger(0, 5);
     let gapInds = [];
-    for (let i = 0; i < numgaps; i++) {
-        gapInds[i] = new Index(randomInteger(0, gridSize))
+    for (let i = 0; i < numGaps; i++) {
+        gapInds[i] = new Index(randomInteger(1, gridSize - 1), randomInteger(1, gridSize - 1))
     }
 
     // Set two random colors to be the base and player colors.
@@ -68,7 +68,7 @@ function setup() {
     let pColorInd = randomInteger(0, colorArray.length);
 
     // Load the starting level up, player is added in here
-    LoadLevel(new Index(5, 5), new Index(gridSize - 1, gridSize - 1), gapInds, bColorInd, pColorInd);
+    LoadLevel(playInd, exitInd, gapInds, bColorInd, pColorInd);
 
     // When user presses / releases a key, fire these functions
     window.addEventListener("keydown", onKeysDown);
@@ -138,7 +138,7 @@ function LoadLevel(playerIndex, exitIndex, gapIndexArray, bColorInd, pColorInd) 
 
     // First, make all the tiles at the indices inside gapIndexArray into gaps
     for (let i = 0; i < gapIndexArray.length; i++) {
-        gridTiles[gapIndexArray[i].x, gapIndexArray[i].y].setGap(true);
+        gridTiles[gapIndexArray[i].x][gapIndexArray[i].y].setGap(true);
     }
 
     // Now make the exit tile, and put it at the specified index
