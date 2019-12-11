@@ -240,7 +240,7 @@ function movePlayer(isHorizontal, isPositive) {
     if (isHorizontal) {
 
         // Gets the tile at the new position and only moves the player / updates tint if said tile exists.
-        // Also disallows backtracking over tiles that are already colored.
+        // Also disallows backtracking over tiles that are already colored and moving onto gaps.
         let moveIndex = getIndexAtCoords(player.x + amount, player.y);
         let tileMovedOnto = moveIndex ? gridTiles[moveIndex.x][moveIndex.y] : null;
         if (tileMovedOnto && tileMovedOnto.canTraverse) {
@@ -251,7 +251,7 @@ function movePlayer(isHorizontal, isPositive) {
     }
     else {
         // Gets the tile at the new position and only moves the player / updates tint if said tile exists.
-        // Also disallows backtracking over tiles that are already colored.
+        // Also disallows backtracking over tiles that are already colored and moving onto gaps.
         let moveIndex = getIndexAtCoords(player.x, player.y + amount);
         let tileMovedOnto = moveIndex ? gridTiles[moveIndex.x][moveIndex.y] : null;
         if (tileMovedOnto && tileMovedOnto.canTraverse) {
