@@ -339,6 +339,6 @@ function isGridColored() {
 
 // Get a random integer between min (inclusive) and max (exclusive).
 // Thanks to https://www.w3schools.com/js/js_random.asp for reminding / reteaching me how to do this.
-function getRndInteger(min, max) {
-    return Math.floor(Math.random() * (max - min) ) + min;
-  }
+function randomInteger(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
+}
