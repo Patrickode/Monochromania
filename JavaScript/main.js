@@ -104,13 +104,19 @@ function update() {
 }
 
 // Loads a level with all the given parameters.
-function LoadLevel(playerIndex, exitIndex, gapIndexArray, bColorInd, pColorInd) {
+function LoadLevel(playerIndex, exitIndex, gapIndexArray) {
     // First of all, reset the scene, so we have a fresh start to load onto.
     ClearScene();
 
-    // Next, set the base and player color.
-    baseColor = colorArray[bColorInd]
-    playerColor = colorArray[pColorInd];
+    // Next, set two random colors to be the base and player colors. Make sure player color is not the same as base color.
+    let baseColorInd = randomInteger(0, colorArray.length);
+    let playerColorInd = baseColorInd
+    while (playerColorInd == baseColorInd) {
+        playerColorInd = randomInteger(0, colorArray.length);
+    }
+
+    baseColor = colorArray[baseColorInd];
+    playerColor = colorArray[playerColorInd];
 
     // Set the amount of offset from the edges of the scene the grid has
     // Currently set to be centered on the scene
@@ -195,15 +201,8 @@ function MakeRandomLevel() {
         gapInds[i] = new Index(randomInteger(1, gridSize - 1), randomInteger(1, gridSize - 1))
     }
 
-    // Set two random colors to be the base and player colors. Make sure player color is not the same as base color.
-    let bColorInd = randomInteger(0, colorArray.length);
-    let pColorInd = bColorInd
-    while (pColorInd == bColorInd) {
-        pColorInd = randomInteger(0, colorArray.length);
-    }
-
     // Load the starting level up, player is added in here
-    LoadLevel(playInd, exitInd, gapInds, bColorInd, pColorInd);
+    LoadLevel(playInd, exitInd, gapInds);
 }
 
 // Removes all children from the stage, giving us a clean slate.
