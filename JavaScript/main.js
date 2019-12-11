@@ -65,21 +65,22 @@ function setup() {
 
 // Update fires every frame; it's where basic game logic and whatnot updates!
 function update() {
-    // Checks if the exit tile is colored, and if so, if every tile is colored
-    // Slightly redundant, but this structure prevents premature level endings
-    if (exitTile.isColored) {
-        if (isGridColored()) {
-            MakeRandomLevel();
-        }
-        else {
-            ResetLevel();
-        }
+    if (isGridColored()) {
+        exitTile.canTraverse = true;
+    }
+    else {
+        exitTile.canTraverse = false;
+    }
+
+    // If the grid is colored, the level's been completed, make a new one
+    if (exitTile.isColored && isGridColored()) {
+        // MakeRandomLevel();
+        window.setTimeout(MakeRandomLevel, 1000);
     }
 
     // Checks if player cannot move, and if so, if the level is not complete
     if (isPlayerTrapped() && !isGridColored()) {
-        // Lose code and stuff, for now just resets the level
-        ResetLevel();
+        window.setTimeout(ResetLevel, 1000);
     }
 }
 
@@ -88,11 +89,9 @@ function LoadLevel(playerIndex, exitIndex, gapIndexArray, bColorInd, pColorInd) 
     // First of all, reset the scene, so we have a fresh start to load onto.
     ClearScene();
 
-    // Next, decide what the base and player color will be.
-    // If player color isn't base color, assign player color normally. Otherwise, if pcolor is too big, subtract one, and if not, add one.
-    // This ensures the base color and player color aren't the same.
+    // Next, set the base and player color.
     baseColor = colorArray[bColorInd]
-    playerColor = pColorInd != bColorInd ? colorArray[pColorInd] : pColorInd >= colorArray.length - 1 ? colorArray[pColorInd - 1] : colorArray[pColorInd + 1];
+    playerColor = colorArray[pColorInd];
 
     // Set the amount of offset from the edges of the scene the grid has
     // Currently set to be centered on the scene
@@ -156,9 +155,19 @@ function LoadLevel(playerIndex, exitIndex, gapIndexArray, bColorInd, pColorInd) 
 }
 
 function MakeRandomLevel() {
-    // Set player and exit index to random indices.
-    let playInd = new Index(randomInteger(0, gridSize), randomInteger(0, gridSize));
-    let exitInd = new Index(randomInteger(0, gridSize), randomInteger(0, gridSize));
+    // Set player and exit index to random indices. Make sure player index is not the exit index.
+    let exitIndX = randomInteger(0, gridSize);
+    let exitIndY = randomInteger(0, gridSize);
+    let playIndX = exitIndX;
+    let playIndY = exitIndY;
+
+    while (playIndX == exitIndX && playIndY == exitIndY) {
+        playIndX = randomInteger(0, gridSize);
+        playIndY = randomInteger(0, gridSize);
+    }
+
+    let exitInd = new Index(exitIndX, exitIndY);
+    let playInd = new Index(playIndX, playIndY);
 
     // Set a random number of gaps, for that many gaps, make a random index.
     let numGaps = randomInteger(0, 5);
@@ -167,9 +176,12 @@ function MakeRandomLevel() {
         gapInds[i] = new Index(randomInteger(1, gridSize - 1), randomInteger(1, gridSize - 1))
     }
 
-    // Set two random colors to be the base and player colors.
+    // Set two random colors to be the base and player colors. Make sure player color is not the same as base color.
     let bColorInd = randomInteger(0, colorArray.length);
-    let pColorInd = randomInteger(0, colorArray.length);
+    let pColorInd = bColorInd
+    while (pColorInd == bColorInd) {
+        pColorInd = randomInteger(0, colorArray.length);
+    }
 
     // Load the starting level up, player is added in here
     LoadLevel(playInd, exitInd, gapInds, bColorInd, pColorInd);
@@ -346,6 +358,7 @@ function getIndexAtCoords(xCoord, yCoord) {
     return false;
 }
 
+// Returns whether the whole grid, besides the exit tile, is colored.
 function isGridColored() {
     // Check if the exit tile is colored. If not, we don't need to check anything else
     if (!exitTile.isColored) { return false }
@@ -353,7 +366,7 @@ function isGridColored() {
     // Check if any tile isn't colored. If it is, bail out and return false.
     for (let x = 0; x < gridSize; x++) {
         for (let y = 0; y < gridSize; y++) {
-            if (gridTiles[x][y].isColored == false) {
+            if (gridTiles[x][y].isColored == false && gridTiles[x][y] != exitTile) {
                 return false;
             }
         }
