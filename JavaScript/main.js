@@ -32,6 +32,7 @@ let startIndex;
 let baseColor;
 let playerColor;
 
+let currentLevel;
 let makingLevel = false;
 let resettingLevel = false;
 
@@ -55,8 +56,9 @@ function setup() {
     player = new PIXI.Sprite.from("Media/Brio-Sprite.png");
     player.anchor.set(0.5);
 
-    // Make level 1.
-    MakeLevelOne();
+    // Later, this will be set to the level in local storage, thus picking up where the player left off
+    currentLevel = 1;
+    loadNumberedLevel(currentLevel);
 
     // When user presses / releases a key, fire these functions
     window.addEventListener("keydown", onKeysDown);
@@ -76,7 +78,8 @@ function update() {
             makingLevel = true;
             window.setTimeout(
                 function () {
-                    MakeRandomLevel();
+                    currentLevel++;
+                    loadNumberedLevel(currentLevel);
                     makingLevel = false;
                 },
                 1000
@@ -100,6 +103,22 @@ function update() {
                 );
             }
         }
+    }
+}
+
+// Loads a level by its number.
+function loadNumberedLevel(levelNum) {
+    switch (levelNum) {
+        case 1:
+            MakeLevelOne();
+            break;
+        case 2:
+            MakeLevelTwo();
+            break;
+
+        default:
+            MakeRandomLevel();
+            break;
     }
 }
 
@@ -408,6 +427,22 @@ function MakeLevelOne() {
 
     let gapInds = GetRectArray(new Index(0, 0), new Index(10, 4));
     gapInds = gapInds.concat(GetRectArray(new Index(0, 6), new Index(10, 10)));
+
+    LoadLevel(playInd, exitInd, gapInds);
+}
+
+function MakeLevelTwo() {
+    let playInd = new Index(3, 5);
+    let exitInd = new Index(7, 5);
+
+    // let nonGapInds = GetRectArray(new Index(4, 4), new Index(6, 6));
+    let gapInds = GetRectArray(new Index(0, 0), new Index(10, 3));
+    gapInds = gapInds.concat(GetRectArray(new Index(0, 7), new Index(10, 10)));
+    gapInds = gapInds.concat(GetRectArray(new Index(0, 4), new Index(2, 6)));
+    gapInds = gapInds.concat(GetRectArray(new Index(8, 4), new Index(10, 6)));
+
+    gapInds.push(new Index(3, 4));
+    gapInds.push(new Index(7, 6));
 
     LoadLevel(playInd, exitInd, gapInds);
 }
