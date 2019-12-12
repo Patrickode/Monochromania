@@ -55,7 +55,7 @@ let levelNum = 1;       //Keeps track of what level we are on.
 
 // preload images, then fire setup function
 PIXI.loader.
-    add(["Media/Brio-Sprite.png", "Media/Tile-Sprite.png", "Media/Exit-Sprite.png"]).
+    add(["Media/Brio-Sprite.png", "Media/Tile-Sprite.png", "Media/Exit-Sprite.png", "Media/Background-Image.png"]).
     on("progress", e => { console.log(`|| ${Math.round(e.progress)}% loaded ||`) }).
     load(setup)
     ;
@@ -64,6 +64,10 @@ PIXI.loader.
 
 // Set up everything needed to run the game at start
 function setup() {
+    // Put the background image in place. It's always there, so it's not part of a container.
+    let bgImage = new PIXI.Sprite.from("Media/Background-Image.png");
+    app.stage.addChild(bgImage);
+
     // First, make the containers for the content of the game, so we can add stuff to them.
     gameContainer = new PIXI.Container();
     uiContainer = new PIXI.Container();
@@ -93,13 +97,16 @@ function setup() {
 }
 
 function createUI() {
+    // Big thanks to https://stackoverflow.com/a/19988202 for teaching me how to get rid of
+    // the ugly spikes that Pixi makes on text when you stroke it
     let uiHeader = new PIXI.TextStyle({
         fill: 0xFFFFFF,
         fontSize: 25,
         align: "center",
         fontFamily: gameFont,
         stroke: 0x000000,
-        strokeThickness: 4
+        strokeThickness: 5,
+        lineJoin: "round"
     });
 
     let uiBody = new PIXI.TextStyle({
@@ -108,7 +115,8 @@ function createUI() {
         align: "center",
         fontFamily: gameFont,
         stroke: 0x000000,
-        strokeThickness: 4
+        strokeThickness: 5,
+        lineJoin: "round"
     });
 
     levelCounter = new PIXI.Text(`Level ???`);
