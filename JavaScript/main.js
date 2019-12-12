@@ -34,6 +34,8 @@ let startIndex;
 let baseColor;
 let playerColor;
 
+let gameContainer;
+let uiContainer;
 let currentLevel;
 let makingLevel = false;
 let resettingLevel = false;
@@ -54,6 +56,12 @@ PIXI.loader.
 
 // Set up everything needed to run the game at start
 function setup() {
+    // First, make the containers for the content of the game, so we can add stuff to them.
+    gameContainer = new PIXI.Container();
+    uiContainer = new PIXI.Container();
+    app.stage.addChild(gameContainer);
+    app.stage.addChild(uiContainer);
+
     // Assign player sprite image, set anchor to center of sprite, but don't add them to the scene yet
     player = new PIXI.Sprite.from("Media/Brio-Sprite.png");
     player.anchor.set(0.5);
@@ -127,7 +135,7 @@ function loadNumberedLevel(levelNum) {
 // Loads a level with all the given parameters.
 function LoadLevel(playerIndex, exitIndex, gapIndexArray) {
     // First of all, reset the scene, so we have a fresh start to load onto.
-    ClearScene();
+    ClearLevel();
 
     // Next, set two random colors to be the base and player colors. Make sure player color is not the same as base color.
     let baseColorInd = randomInteger(0, colorArray.length);
@@ -159,8 +167,8 @@ function LoadLevel(playerIndex, exitIndex, gapIndexArray) {
                 baseColor
             );
 
-            // Once we've positioned the new tile, add it to the stage.
-            app.stage.addChild(gridTiles[x][y]);
+            // Once we've positioned the new tile, add it to the game container.
+            gameContainer.addChild(gridTiles[x][y]);
         }
     }
 
@@ -183,7 +191,7 @@ function LoadLevel(playerIndex, exitIndex, gapIndexArray) {
         baseColor
     )
     gridTiles[exitIndex.x][exitIndex.y] = exitTile;
-    app.stage.addChild(exitTile);
+    gameContainer.addChild(exitTile);
 
     // Finally, we add the player to the scene
 
@@ -193,7 +201,7 @@ function LoadLevel(playerIndex, exitIndex, gapIndexArray) {
     player.position = gridTiles[playerIndex.x][playerIndex.y].position;
     startIndex = new Index(playerIndex.x, playerIndex.y);
     player.tint = playerColor;
-    app.stage.addChild(player);
+    gameContainer.addChild(player);
 
     // The player's now on their starting tile, so update that tile to be their color, and make it not be a gap if it is one.
     gridTiles[playerIndex.x][playerIndex.y].setGap(false);
@@ -229,9 +237,9 @@ function MakeRandomLevel() {
 // Removes all children from the stage, giving us a clean slate.
 // Thanks to https://github.com/pixijs/pixi.js/issues/214#issuecomment-21243737 for
 // helping me fix some bugs and logic errors with removing all the children.
-function ClearScene() {
-    while (app.stage.children[0]) {
-        app.stage.removeChild(app.stage.children[0]);
+function ClearLevel() {
+    while (gameContainer.children[0]) {
+        gameContainer.removeChild(gameContainer.children[0]);
     }
 }
 
