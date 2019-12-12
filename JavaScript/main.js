@@ -358,7 +358,7 @@ function GetMovementInput() {
 }
 
 function getResetInput() {
-    if (keyPressed(rKey)) {
+    if (!resettingLevel && !makingLevel && keyPressed(rKey)) {
         ResetLevel();
     }
 }
