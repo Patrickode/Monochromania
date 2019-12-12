@@ -34,6 +34,8 @@ let startIndex;
 let baseColor;
 let playerColor;
 
+let moveSound;
+
 let gameContainer;
 let uiContainer;
 let gameFont = "Verdana";
@@ -67,6 +69,9 @@ function setup() {
 
     // Now make the UI.
     createUI();
+
+    // Now load the sounds.
+    loadSounds();
 
     // Assign player sprite image, set anchor to center of sprite, but don't add them to the scene yet
     player = new PIXI.Sprite.from("Media/Brio-Sprite.png");
@@ -136,6 +141,12 @@ function createUI() {
     resetKey.x = resetHeader.x - resetHeader.width / 2;
     resetKey.y = moveKeys.y - moveKeys.height / 3;
     uiContainer.addChild(resetKey);
+}
+
+function loadSounds() {
+    moveSound = new Howl({
+        src: ["Audio/move-click.wav"]
+    });
 }
 
 // Update fires every frame; it's where basic game logic and whatnot updates!
@@ -380,8 +391,8 @@ function movePlayer(isHorizontal, isPositive) {
         let tileMovedOnto = moveIndex ? gridTiles[moveIndex.x][moveIndex.y] : null;
         if (tileMovedOnto && tileMovedOnto.canTraverse) {
             player.x += amount;
-
             tileMovedOnto.updateColor(true, baseColor, playerColor);
+            moveSound.play();
         }
     }
     else {
@@ -391,8 +402,8 @@ function movePlayer(isHorizontal, isPositive) {
         let tileMovedOnto = moveIndex ? gridTiles[moveIndex.x][moveIndex.y] : null;
         if (tileMovedOnto && tileMovedOnto.canTraverse) {
             player.y += amount;
-
             tileMovedOnto.updateColor(true, baseColor, playerColor);
+            moveSound.play();
         }
     }
 }
