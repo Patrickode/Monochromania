@@ -9,3 +9,7 @@ Cropped some silence off the end.
 Lose Sound: https://freesound.org/people/cabled_mess/sounds/350983/
 Made by "cabled_mess", with a Creative Commons 0 liscense.
 Sped up the clip a little.
+
+Win Sound: https://opengameart.org/content/picked-coin-echo-2
+Made by "NenadSimic", with a Creative Commons 3.0 liscense.
+Sped up the clip a little and made it a tiny bit quieter.

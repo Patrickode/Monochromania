@@ -37,6 +37,7 @@ let playerColor;
 let moveSound;
 let resetSound;
 let loseSound;
+let winSound;
 
 let gameContainer;
 let uiContainer;
@@ -157,6 +158,10 @@ function loadSounds() {
     loseSound = new Howl({
         src: ["Audio/lose-sound.wav"]
     });
+    
+    winSound = new Howl({
+        src: ["Audio/win-sound.wav"]
+    });
 }
 
 // Update fires every frame; it's where basic game logic and whatnot updates!
@@ -170,6 +175,7 @@ function update() {
         // This section sets makingLevel to true to prevent additional calls, pauses for some milliseconds,
         // and once it's done pausing, makes a random level and sets makingLevel to false, since it's done now.
         if (!makingLevel) {
+            winSound.play();
             makingLevel = true;
             window.setTimeout(
                 function () {
@@ -177,7 +183,7 @@ function update() {
                     loadNumberedLevel(currentLevel);
                     makingLevel = false;
                 },
-                1000
+                1100
             );
         }
     }
