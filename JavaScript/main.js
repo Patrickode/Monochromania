@@ -36,6 +36,7 @@ let playerColor;
 
 let moveSound;
 let resetSound;
+let loseSound;
 
 let gameContainer;
 let uiContainer;
@@ -152,6 +153,10 @@ function loadSounds() {
     resetSound = new Howl({
         src: ["Audio/reset-doot.wav"]
     });
+
+    loseSound = new Howl({
+        src: ["Audio/lose-sound.wav"]
+    });
 }
 
 // Update fires every frame; it's where basic game logic and whatnot updates!
@@ -183,13 +188,14 @@ function update() {
         if (!((player.x == exitTile.x && player.y == exitTile.y) && isGridColored())) {
             // See makingLevel comment above. Pauses for some milliseconds, and resets the level, preventing extra calls.
             if (!resettingLevel) {
+                loseSound.play();
                 resettingLevel = true;
                 window.setTimeout(
                     function () {
                         ResetLevel();
                         resettingLevel = false;
                     },
-                    1000
+                    1100
                 );
             }
         }
