@@ -35,6 +35,7 @@ let baseColor;
 let playerColor;
 
 let moveSound;
+let resetSound;
 
 let gameContainer;
 let uiContainer;
@@ -146,6 +147,10 @@ function createUI() {
 function loadSounds() {
     moveSound = new Howl({
         src: ["Audio/move-click.wav"]
+    });
+
+    resetSound = new Howl({
+        src: ["Audio/reset-doot.wav"]
     });
 }
 
@@ -371,6 +376,7 @@ function GetMovementInput() {
 function getResetInput() {
     if (!resettingLevel && !makingLevel && keyPressed(rKey)) {
         ResetLevel();
+        resetSound.play();
     }
 }
 
