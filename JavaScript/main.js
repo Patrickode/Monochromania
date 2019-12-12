@@ -36,6 +36,9 @@ let playerColor;
 
 let gameContainer;
 let uiContainer;
+let gameFont = "Verdana";
+let levelCounter;
+
 let currentLevel;
 let makingLevel = false;
 let resettingLevel = false;
@@ -62,6 +65,9 @@ function setup() {
     app.stage.addChild(gameContainer);
     app.stage.addChild(uiContainer);
 
+    // Now make the UI.
+    createUI();
+
     // Assign player sprite image, set anchor to center of sprite, but don't add them to the scene yet
     player = new PIXI.Sprite.from("Media/Brio-Sprite.png");
     player.anchor.set(0.5);
@@ -78,8 +84,66 @@ function setup() {
     app.ticker.add(update);
 }
 
+function createUI() {
+    let uiHeader = new PIXI.TextStyle({
+        fill: 0xFFFFFF,
+        fontSize: 25,
+        align: "center",
+        fontFamily: gameFont,
+        stroke: 0x000000,
+        strokeThickness: 4
+    });
+
+    let uiBody = new PIXI.TextStyle({
+        fill: 0xFFFFFF,
+        fontSize: 20,
+        align: "center",
+        fontFamily: gameFont,
+        stroke: 0x000000,
+        strokeThickness: 4
+    });
+
+    levelCounter = new PIXI.Text(`Level ???`);
+    levelCounter.style = uiBody;
+    levelCounter.x = 0 + 15;
+    levelCounter.y = 0 + 15;
+    uiContainer.addChild(levelCounter);
+
+    let moveHeader = new PIXI.Text("Move");
+    moveHeader.style = uiHeader;
+    moveHeader.anchor.set(0, 1);
+    moveHeader.x = 0 + 15;
+    moveHeader.y = sceneHeight - 80;
+    uiContainer.addChild(moveHeader);
+
+    let moveKeys = new PIXI.Text("\nW\nA S D");
+    moveKeys.style = uiBody;
+    moveKeys.anchor.set(0.5, 1);
+    moveKeys.x = moveHeader.x + moveHeader.width / 2;
+    moveKeys.y = sceneHeight - 15;
+    uiContainer.addChild(moveKeys);
+
+    let resetHeader = new PIXI.Text("Reset");
+    resetHeader.style = uiHeader;
+    resetHeader.anchor.set(1, 1);
+    resetHeader.x = sceneWidth - 15;
+    resetHeader.y = moveHeader.y;
+    uiContainer.addChild(resetHeader);
+
+    let resetKey = new PIXI.Text("R");
+    resetKey.style = uiBody;
+    resetKey.anchor.set(0.5, 0.5);
+    resetKey.x = resetHeader.x - resetHeader.width / 2;
+    resetKey.y = moveKeys.y - moveKeys.height / 3;
+    uiContainer.addChild(resetKey);
+}
+
 // Update fires every frame; it's where basic game logic and whatnot updates!
 function update() {
+    // Update the UI to display the proper level at all times
+    // Can also be used to update score, if we add score later
+    levelCounter.text = `Level ${currentLevel}`;
+
     // If the grid is colored, and the player is on the exit, the level's been completed, make a new one
     if (isGridColored() && (player.x == exitTile.x && player.y == exitTile.y)) {
         // This section sets makingLevel to true to prevent additional calls, pauses for some milliseconds,
