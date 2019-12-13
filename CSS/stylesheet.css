@@ -1,3 +1,283 @@
+/* #region General Styling */
+html {
+    background-image: url("../media/background-tile.png");
+    background-repeat: round;
+    background-position: -25% 0%;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 1.25rem;
+    margin-bottom: 5%;
+}
+body header {
+    text-align: center;
+}
+
+main {
+    max-width: 75%;
+    margin: 0 auto;
+}
+
+h2 {
+    margin: 0;
+}
+h3 {
+    margin: 1.5rem 0 1.25rem;
+}    
+
+hr {
+    display: block;
+    height: 0.25rem;
+    margin: 0.625rem 0;
+    background-color: dimgray;
+    background-image: linear-gradient(to right, red, orange, yellow, lime, aqua, blue, magenta);
+}
+/* #endregion General Styling */
+
+
+/* #region General Link Styling (contrast with "nav a" and "#play-now-button") */
+a:link {
+color: #303030;
+}
+a:visited {
+color: #8c8c8c;
+font-weight: normal;
+}
+nav a:focus, li a:focus, nav a:hover, li a:hover {
+color: dimgrey;
+background-color: lightgrey;
+}
+nav a:active, li a:active {
+color: black;
+background-color: grey;
+}
+/* #endregion End General Link Styling */
+
+
+/* #region Header / Nav Styling */
+header a {
+    display: inline-block;
+    margin: 0 auto;
+    
+    min-height: max-content;
+
+    border-radius: 1000px;
+    text-align: center;
+}
+header > a {
+    margin: 10px auto;
+}
+
+#header-image {
+    display: inline-block;
+    box-sizing: border-box;
+    
+    max-width: 80vw;
+    max-width: calc(100% - 2.25rem);
+    
+    background-origin: border-box;
+    background-image: linear-gradient(to right, red, orange, yellow, lime, aqua, blue, magenta);
+    
+    border-radius: 1000px;
+
+    box-shadow: 0px 0px 20px black;
+
+    transition: border 0.3s;
+    transition: box-shadow 0.3s;
+}
+#header-image:focus, #header-image:hover {
+    padding: 0px;
+
+    background-image: linear-gradient(to right, magenta, blue, aqua, lime, yellow, orange, red);        
+    
+    border-radius: 1000px;
+
+    box-shadow: 0px 0px 35px 5px black;
+}
+#header-image:active {
+    box-shadow: 0px 0px 35px 10px black;
+}
+
+header h1 {
+    display: block;
+    margin: 1rem auto 2.5rem;
+    padding: 0.5rem 1.5rem;
+    max-width: max-content;
+
+    font-size: 2rem;
+    letter-spacing: 0.1rem;
+    text-align: center;
+
+    background-color: lightgrey;
+    border: 4px dashed grey;
+    border-radius: 1000px;
+
+    color: white;
+    box-shadow: 0px 0px 20px black;
+    text-shadow:
+        0px 0px 5px #000,
+        -1px -1px 0 #000,
+        1px -1px 0 #000,
+        -1px 1px 0 #000,
+        1px 1px 0 #000;
+}
+
+nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+
+    max-width: 75%;
+    margin: 1rem auto;
+    padding: 1rem;
+    
+    border: 5px solid dimgrey;
+    box-shadow: 0px 0px 15px black;
+    background-color: lightgrey;
+}
+nav a {
+    flex: 1;
+    border: 2px solid dimgrey;
+    background-color: gainsboro;
+    padding: 0.6rem 0.6rem;
+    margin: 0.5rem 0.5rem;
+
+    transition: color 0.1s, background-color 0.1s;
+}
+nav a:focus, nav a:hover {
+    color: white;
+    background-color: darkgrey;
+}
+nav a:active {
+    color: black;
+    border-color: black;
+    background-color: grey;
+}
+/* #endregion Header / Nav Styling--- */
+
+
+/* #region Content Container Styling */
+.content-container {
+    border: 10px double dimgrey;
+
+    border-image: linear-gradient(to bottom right, red, orange, yellow, lime, aqua, blue, magenta);
+    border-image-slice: 1;
+    border-image-width: 5px;
+    
+    box-shadow: 0px 0px 15px;
+
+    background-color: #ebebeb;
+
+    padding: 1.5rem;
+    margin-top: 2rem;
+}
+.top-container {
+    margin-top: 1rem;
+}
+/* #endregion Content Container Styling */
+
+
+/* #region Introduction / Index Styling */
+#introduction h1, #introduction h2 {
+    text-align: center;
+    margin: 2.5rem auto 2.5rem;
+}
+
+#introduction p {
+    margin-left: 15%;
+    margin-right: 15%;
+    text-align: left;
+}
+
+/* This is the button under the introduction paragraph. */
+#play-now-button {
+    display: block;
+    font-size: 2rem;
+    font-weight: bold;
+    white-space: nowrap;
+    max-width: min-content;
+    padding: 0.75rem;
+    margin: 3rem auto;
+    color: black;
+
+    background-image: linear-gradient(to right, red, orange, yellow, lime, aqua, blue, magenta);
+    border: 5px solid dimgrey;
+    border-radius: 15px;
+
+    box-shadow: 0px 0px 15px black;
+
+    transition: border 0.4s, box-shadow 0.4s;
+}
+#play-now-button:focus, #play-now-button:hover {
+    color: dimgrey;
+    background-image: linear-gradient(to right, magenta, blue, aqua, lime, yellow, orange, red);
+    border-color: lightgrey;
+
+    box-shadow: 0px 0px 30px black;
+}
+#play-now-button:active {
+    border-color: black;
+    color: white;
+
+    box-shadow: 0px 0px 30px 5px black;
+}
+#play-now-button p {
+    margin: 0 auto;
+    padding: 0.45rem 0.75rem;
+    border-radius: 1000px;
+
+    background: white;
+}
+#play-now-button:active p {
+    background: grey;
+}
+/* #endregion End Introduction / Index Styling */
+
+
+/* #region Proposal Styling */
+/* This is the container that holds the screenshots, not the screenshots themselves. */
+#mockup-screenshots {
+    margin: 0 auto;
+    text-align: center;
+}
+#mockup-screenshots img {
+    max-width: 45%;
+}
+
+/* This is the gif underneath the mockup screenshots. */
+#inspiration {
+    margin-top: 3rem;
+    text-align: center;
+}
+#inspiration img {
+    max-width: 100%;
+}
+
+.caption-text {
+    font-style: italic;
+    font-size: 1.1rem;
+}
+/* #endregion Proposal Styling */
+
+
+/* #region Source Styling */
+#documentation-header {    
+text-align: center;
+}
+
+#source-list li{
+padding: 1rem 0;
+}
+/* #endregion Source Styling */
+
+
+/* #region Responsive Styling */
+
+
+
+/* PixiJS Styling */
 canvas {
     display: block;
     margin: auto;
