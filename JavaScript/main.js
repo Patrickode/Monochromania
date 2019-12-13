@@ -671,7 +671,7 @@ function GetStoredLevel() {
 
     // If the result of the parse is something that's not a level, default to one.
     // Otherwise, we've successfully gotten the stored level, so set it.
-    if (isNaN(storedLevel) && storedLevel > 0) {
+    if (!isNaN(storedLevel) && storedLevel > 0) {
         currentLevel = storedLevel;
     }
     else {
