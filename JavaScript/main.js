@@ -120,12 +120,14 @@ function createUI() {
         lineJoin: "round"
     });
 
+    // Level Counter, top left
     levelCounter = new PIXI.Text(`Level ???`);
     levelCounter.style = uiBody;
     levelCounter.x = 0 + 15;
     levelCounter.y = 0 + 15;
     uiContainer.addChild(levelCounter);
 
+    // Movement instructions, bottom left
     let moveHeader = new PIXI.Text("Move");
     moveHeader.style = uiHeader;
     moveHeader.anchor.set(0, 1);
@@ -140,6 +142,7 @@ function createUI() {
     moveKeys.y = sceneHeight - 15;
     uiContainer.addChild(moveKeys);
 
+    // Reset Instructions, bottom right
     let resetHeader = new PIXI.Text("Reset");
     resetHeader.style = uiHeader;
     resetHeader.anchor.set(1, 1);
@@ -153,6 +156,22 @@ function createUI() {
     resetKey.x = resetHeader.x - resetHeader.width / 2;
     resetKey.y = moveKeys.y - moveKeys.height / 3;
     uiContainer.addChild(resetKey);
+
+    // Reset progress button, top right
+    let startOverButton = new PIXI.Text("Start\nOver");
+    let startOverStyle = new PIXI.TextStyle(uiHeader);
+    startOverButton.style = startOverStyle;
+    startOverButton.anchor.set(1, 0);
+    startOverButton.x = sceneWidth - 15;
+    startOverButton.y = 0 + 15;
+    
+    startOverButton.interactive = true;
+    startOverButton.buttonMode = true;
+    startOverButton.on("pointerup", resetGameProgress);
+    startOverButton.on("pointerover", e => e.target.style.fill = 0xFF0000);
+    startOverButton.on("pointerout", e => e.currentTarget.style.fill = 0xFFFFFF);
+
+    uiContainer.addChild(startOverButton);
 }
 
 function loadSounds() {
@@ -211,7 +230,7 @@ function update() {
             if (!resettingLevel) {
                 // Make sure this block isn't run until it's done
                 resettingLevel = true;
-                
+
                 // Play the lose sound and after some miliseconds, reset the level.
                 loseSound.play();
                 window.setTimeout(
@@ -241,7 +260,7 @@ function loadNumberedLevel(levelNum) {
         case 4:
             MakeLevelFour();
             break;
-        
+
         // If we ever run out of levels, just make a random one.
         default:
             MakeRandomLevel();
@@ -658,4 +677,11 @@ function GetStoredLevel() {
     else {
         currentLevel = 1;
     }
+}
+
+function resetGameProgress() {
+    // Reset currentLevel to 1, set storedLevel to 1, and then load level 1.
+    currentLevel = 1;
+    localStorage.setItem(levelKey, JSON.stringify(1));
+    loadNumberedLevel(1);
 }
