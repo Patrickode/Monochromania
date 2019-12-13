@@ -283,3 +283,19 @@ canvas {
     margin: auto;
     text-align: center;
 }
+
+#canvas-container {
+    box-sizing: padding-box;
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    width: 816px;
+    height: 616px;
+    margin: 0 auto;
+
+    border-image: linear-gradient(to bottom right, red, orange, yellow, lime, aqua, blue, magenta);
+    border-image-slice: 1;
+    border-image-width: 8px;
+
+    box-shadow: 0px 0px 15px;
+}

@@ -3,7 +3,7 @@
 
 // Add Pixi to the canvas
 const app = new PIXI.Application(600, 600);
-document.body.appendChild(app.view);
+document.querySelector("#canvas-container").appendChild(app.view);
 
 // constants
 const sceneWidth = app.view.width;
