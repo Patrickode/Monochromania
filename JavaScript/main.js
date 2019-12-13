@@ -11,6 +11,8 @@ const sceneHeight = app.view.height;
 const tileSize = 50;
 //red, orange, yellow, green, cyan, purple, pink
 const colorArray = [0xFF0000, 0xFF7F00, 0xFFFF00, 0x00FF00, 0x00FFFF, 0x9400D3, 0xFF00FF];
+const keyPrefix = "mnchrm-";
+const levelKey = keyPrefix + "level";
 
 // #region Key Codes
 const wKey = 87;
@@ -51,8 +53,6 @@ let resettingLevel = false;
 let player;
 let keysDown = {};      //Is the key at this index (code) currently down?
 let downLastFrame = {}; //Was the key at this index (code) down last frame?
-let levelNum = 1;       //Keeps track of what level we are on.
-let storedLevelPass;    //For the sake of local storage.
 
 // preload images, then fire setup function
 PIXI.loader.
@@ -85,7 +85,7 @@ function setup() {
     player = new PIXI.Sprite.from("Media/Brio-Sprite.png");
     player.anchor.set(0.5);
 
-    // Later, this will be set to the level in local storage, thus picking up where the player left off
+    // Get the level stored in local storage (defaults to 1 if there isn't one) and load it up.
     GetStoredLevel();
     loadNumberedLevel(currentLevel);
 
@@ -181,14 +181,20 @@ function update() {
 
     // If the grid is colored, and the player is on the exit, the level's been completed, make a new one
     if (isGridColored() && (player.x == exitTile.x && player.y == exitTile.y)) {
-        // This section sets makingLevel to true to prevent additional calls, pauses for some milliseconds,
-        // and once it's done pausing, makes a random level and sets makingLevel to false, since it's done now.
+        // If not already doing this block,
         if (!makingLevel) {
-            winSound.play();
+            // Make sure this block isn't run again until we're done here
             makingLevel = true;
+
+            // Play the win sound, and after some milliseconds, do the following;
+            winSound.play();
             window.setTimeout(
                 function () {
+                    // Add one to the current level, because we're moving on.
                     currentLevel++;
+                    // Update local storage accordingly.
+                    localStorage.setItem(levelKey, JSON.stringify(currentLevel));
+                    // Finally, load up the next level.
                     loadNumberedLevel(currentLevel);
                     makingLevel = false;
                 },
@@ -201,10 +207,13 @@ function update() {
     if (isPlayerTrapped()) {
         // Only reset if the level is not complete.
         if (!((player.x == exitTile.x && player.y == exitTile.y) && isGridColored())) {
-            // See makingLevel comment above. Pauses for some milliseconds, and resets the level, preventing extra calls.
+            // If not already doing this block,
             if (!resettingLevel) {
-                loseSound.play();
+                // Make sure this block isn't run until it's done
                 resettingLevel = true;
+                
+                // Play the lose sound and after some miliseconds, reset the level.
+                loseSound.play();
                 window.setTimeout(
                     function () {
                         ResetLevel();
@@ -232,6 +241,8 @@ function loadNumberedLevel(levelNum) {
         case 4:
             MakeLevelFour();
             break;
+        
+        // If we ever run out of levels, just make a random one.
         default:
             MakeRandomLevel();
             break;
@@ -563,7 +574,6 @@ function MakeLevelTwo() {
     gapInds = gapInds.concat(GetRectArray(new Index(0, 7), new Index(10, 10)));
     gapInds = gapInds.concat(GetRectArray(new Index(0, 4), new Index(2, 6)));
     gapInds = gapInds.concat(GetRectArray(new Index(8, 4), new Index(10, 6)));
-    localStorage.setItem(storedLevelPass, 'two');
     gapInds.push(new Index(3, 4));
     gapInds.push(new Index(7, 6));
 
@@ -586,10 +596,6 @@ function MakeLevelThree() {
 
     gapInds.push(new Index(6, 8));
     gapInds.push(new Index(1, 3));
-    localStorage.setItem(storedLevelPass, 'three');
-
-
-
 
     LoadLevel(playInd, exitInd, gapInds);
 }
@@ -623,9 +629,7 @@ function MakeLevelFour() {
 
     gapInds.push(new Index(10, 4));
     gapInds.push(new Index(10, 6));
-    localStorage.setItem(storedLevelPass, 'four');
     LoadLevel(playInd, exitInd, gapInds);
-
 }
 
 // Returns a rectangle of indices, starting from topLeftInd and ending at bottomRightInd, in an array format.
@@ -642,19 +646,16 @@ function GetRectArray(topLeftInd, bottomRightInd) {
 }
 
 function GetStoredLevel() {
-    let storedLevel = localStorage.getItem(storedLevelPass);
+    // Finds the stored level in local storage, and parses it from a stringified thing.
+    let storedLevel = localStorage.getItem(levelKey);
+    storedLevel = JSON.parse(storedLevel);
 
-    if (storedLevel == "two") {
-        currentLevel = 2;
-    }
-    else if (storedLevel == "three") {
-        currentLevel = 3;
-    }
-    else if (storedLevel == "four") {
-        currentLevel = 4;
+    // If the result of the parse is something that's not a level, default to one.
+    // Otherwise, we've successfully gotten the stored level, so set it.
+    if (isNaN(storedLevel) && storedLevel > 0) {
+        currentLevel = storedLevel;
     }
     else {
         currentLevel = 1;
     }
-
 }
