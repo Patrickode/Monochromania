@@ -52,7 +52,7 @@ let player;
 let keysDown = {};      //Is the key at this index (code) currently down?
 let downLastFrame = {}; //Was the key at this index (code) down last frame?
 let levelNum = 1;       //Keeps track of what level we are on.
-let storedLevelPass; //For the sake of local storage.
+let storedLevelPass;    //For the sake of local storage.
 
 // preload images, then fire setup function
 PIXI.loader.
@@ -167,7 +167,7 @@ function loadSounds() {
     loseSound = new Howl({
         src: ["Audio/lose-sound.wav"]
     });
-    
+
     winSound = new Howl({
         src: ["Audio/win-sound.wav"]
     });
@@ -574,55 +574,54 @@ function MakeLevelThree() {
     let playInd = new Index(0, 5);
     let exitInd = new Index(5, 5);
 
-    let gapInds = GetRectArray(new Index(2,2), new Index(8,4));
-    gapInds.push(new Index(4,5));
-    gapInds.push(new Index(6,5));
-    
-    gapInds.push(new Index(4,6));
-    gapInds.push(new Index(6,6));
-    
-    gapInds.push(new Index(4,7));
-    gapInds.push(new Index(6,7));
-    
-    gapInds.push(new Index(6,8));
-    gapInds.push(new Index(1,3));
+    let gapInds = GetRectArray(new Index(2, 2), new Index(8, 4));
+    gapInds.push(new Index(4, 5));
+    gapInds.push(new Index(6, 5));
+
+    gapInds.push(new Index(4, 6));
+    gapInds.push(new Index(6, 6));
+
+    gapInds.push(new Index(4, 7));
+    gapInds.push(new Index(6, 7));
+
+    gapInds.push(new Index(6, 8));
+    gapInds.push(new Index(1, 3));
     localStorage.setItem(storedLevelPass, 'three');
-    
-    
+
+
 
 
     LoadLevel(playInd, exitInd, gapInds);
 }
 
-function MakeLevelFour()
-{
-    
-    let playInd = new Index(0,5);
+function MakeLevelFour() {
+
+    let playInd = new Index(0, 5);
     let exitInd = new Index(10, 5);
 
     let gapInds = [];
 
-    gapInds.push(new Index(2,2));
-    gapInds.push(new Index(3,2));
-    gapInds.push(new Index(2,3));
-    gapInds.push(new Index(3,3));
+    gapInds.push(new Index(2, 2));
+    gapInds.push(new Index(3, 2));
+    gapInds.push(new Index(2, 3));
+    gapInds.push(new Index(3, 3));
 
-    gapInds.push(new Index(2,8));
-    gapInds.push(new Index(2,7));
-    gapInds.push(new Index(3,8));
-    gapInds.push(new Index(3,7));
+    gapInds.push(new Index(2, 8));
+    gapInds.push(new Index(2, 7));
+    gapInds.push(new Index(3, 8));
+    gapInds.push(new Index(3, 7));
 
-    gapInds.push(new Index(8,8));
-    gapInds.push(new Index(8,7));
-    gapInds.push(new Index(7,8));
-    gapInds.push(new Index(7,7));
+    gapInds.push(new Index(8, 8));
+    gapInds.push(new Index(8, 7));
+    gapInds.push(new Index(7, 8));
+    gapInds.push(new Index(7, 7));
 
-    gapInds.push(new Index(8,2));
-    gapInds.push(new Index(7,2));
-    gapInds.push(new Index(8,3));
-    gapInds.push(new Index(7,3));
+    gapInds.push(new Index(8, 2));
+    gapInds.push(new Index(7, 2));
+    gapInds.push(new Index(8, 3));
+    gapInds.push(new Index(7, 3));
 
-    gapInds.push(new Index(10,4));
+    gapInds.push(new Index(10, 4));
     gapInds.push(new Index(10, 6));
     localStorage.setItem(storedLevelPass, 'four');
     LoadLevel(playInd, exitInd, gapInds);
@@ -642,23 +641,19 @@ function GetRectArray(topLeftInd, bottomRightInd) {
     return rectArray;
 }
 
-function GetStoredLevel()
-{
+function GetStoredLevel() {
     let storedLevel = localStorage.getItem(storedLevelPass);
 
-    if(storedLevel == "two")
-    {
+    if (storedLevel == "two") {
         currentLevel = 2;
     }
-    else if(storedLevel == "three")
-    {
+    else if (storedLevel == "three") {
         currentLevel = 3;
     }
-    else if(storedLevel == "four")
-    {
+    else if (storedLevel == "four") {
         currentLevel = 4;
     }
-    else{
+    else {
         currentLevel = 1;
     }
 
