@@ -285,7 +285,6 @@ canvas {
 }
 
 #canvas-container {
-    box-sizing: padding-box;
     display: flex;
     align-items: center;
     justify-items: center;
