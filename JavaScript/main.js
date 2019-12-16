@@ -260,7 +260,12 @@ function loadNumberedLevel(levelNum) {
         case 4:
             MakeLevelFour();
             break;
-
+        case 5:
+            MakeLevelFive();
+            break;
+        case 6:
+            MakeLevelSix();
+            break;
         // If we ever run out of levels, just make a random one.
         default:
             MakeRandomLevel();
@@ -650,6 +655,38 @@ function MakeLevelFour() {
     gapInds.push(new Index(10, 6));
     LoadLevel(playInd, exitInd, gapInds);
 }
+
+function MakeLevelFive(){
+
+    let playInd = new Index(0, 0);
+    let exitInd = new Index(10, 10);
+
+    let gapInds = [];
+
+    
+    gapInds = GetRectArray(new Index(1,0), new Index(10,1));
+    gapInds= gapInds.concat(GetRectArray(new Index(0,9), new Index(9,10)));
+    
+    gapInds.push(new Index(5,2));
+    gapInds.push(new Index(5,3));
+    
+    gapInds.push(new Index(5,7));
+    gapInds.push(new Index(5,8));
+    LoadLevel(playInd, exitInd, gapInds);
+
+}
+
+function MakeLevelSix()
+{
+    let playInd = new Index(0,0);
+    let exitInd = new Index(10,10);
+    
+    let gapInds = GetRectArray(new Index(4,0), new Index(6,3));
+    gapInds = gapInds.concat(GetRectArray(new Index(4,7), new Index(6,10)));
+
+    LoadLevel(playInd, exitInd, gapInds);
+}
+
 
 // Returns a rectangle of indices, starting from topLeftInd and ending at bottomRightInd, in an array format.
 function GetRectArray(topLeftInd, bottomRightInd) {
